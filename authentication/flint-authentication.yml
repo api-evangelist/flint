@@ -1,0 +1,38 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.flint.com/docs/api
+docs: https://www.flint.com/docs/api
+summary:
+  types: [http, oauth2]
+  http_schemes: [bearer]
+  api_key_prefix: "ak_"
+  oauth2_flows: [authorizationCode]
+  notes: >-
+    The REST Agent Tasks API uses a bearer API key. The hosted MCP server uses
+    OAuth 2.0 (authorization code + PKCE) via Clerk as the authorization server.
+schemes:
+  - name: bearerApiKey
+    type: http
+    scheme: bearer
+    surface: rest-api
+    header: Authorization
+    format: "Bearer [example key]"
+    provisioning: >-
+      API keys are created in Flint team settings and require at least member
+      role permissions.
+    sources: [openapi/flint-agent-tasks-openapi.yml, https://www.flint.com/docs/api]
+  - name: mcpOAuth
+    type: oauth2
+    surface: mcp
+    authorization_server: https://clerk.tryflint.com
+    authorization_endpoint: https://clerk.tryflint.com/oauth/authorize
+    token_endpoint: https://clerk.tryflint.com/oauth/token
+    registration_endpoint: https://clerk.tryflint.com/oauth/register
+    flows: [authorizationCode]
+    pkce: S256
+    grant_types: [authorization_code, refresh_token]
+    token_endpoint_auth_methods: [client_secret_basic, client_secret_post, none]
+    dynamic_client_registration: true
+    sources:
+      - https://mcp.tryflint.com/.well-known/oauth-protected-resource
+      - https://clerk.tryflint.com/.well-known/oauth-authorization-server
