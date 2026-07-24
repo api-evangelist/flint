@@ -1,0 +1,176 @@
+openapi: 3.1.0
+info:
+  title: Flint Agent Tasks API
+  version: v1
+  description: Flint's Agent Tasks API lets you run background AI agents against a Flint site to modify pages from a free-form prompt, or generate multiple pages from a template. Tasks run asynchronously; poll the task or supply a callbackUrl webhook to receive completion. Landing pages are generated on-brand and can be optionally published.
+  contact:
+    name: Flint Support
+    url: https://www.flint.com/docs/api
+    email: support@tryflint.com
+  x-logo:
+    url: https://www.flint.com/
+servers:
+- url: https://app.tryflint.com/api/v1
+  description: Production
+security:
+- bearerApiKey: []
+tags:
+- name: Agent Tasks
+  description: Start and monitor background AI agent tasks on a Flint site.
+paths:
+  /agent/tasks:
+    post:
+      operationId: createAgentTask
+      summary: Create an agent task
+      description: 'Start a background AI agent on a Flint site. Two task types are supported: a free-form `prompt` task that instructs the agent to modify the site, and a `generate_pages` task that creates multiple pages from a template page and a list of items. Returns a taskId to poll or a callbackUrl is invoked on completion.'
+      tags:
+      - Agent Tasks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/PromptTaskRequest'
+              - $ref: '#/components/schemas/GeneratePagesRequest'
+      responses:
+        '200':
+          description: Task accepted and running.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskAccepted'
+        '400':
+          description: Invalid input or missing configuration.
+        '404':
+          description: Site not found.
+        '429':
+          description: Too Many Requests — rate limit exceeded.
+        '500':
+          description: Server error.
+  /agent/tasks/{taskId}:
+    get:
+      operationId: getAgentTask
+      summary: Get task status
+      description: Retrieve the status of a previously created agent task. While running, returns status only. On completion, returns an output object listing the pages created, modified, and deleted. On failure, returns an errorMessage.
+      tags:
+      - Agent Tasks
+      parameters:
+      - name: taskId
+        in: path
+        required: true
+        description: The task identifier returned by createAgentTask.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Task status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskStatus'
+        '404':
+          description: Task not found.
+components:
+  schemas:
+    TaskAccepted:
+      type: object
+      properties:
+        taskId:
+          type: string
+          example: bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4
+        status:
+          type: string
+          example: running
+        createdAt:
+          type: string
+          format: date-time
+    GeneratePagesRequest:
+      type: object
+      required:
+      - siteId
+      - command
+      - templatePageSlug
+      - items
+      properties:
+        siteId:
+          type: string
+          description: The Flint site to operate on.
+        command:
+          type: string
+          enum:
+          - generate_pages
+          description: Must be "generate_pages" for template page generation.
+        templatePageSlug:
+          type: string
+          description: Slug of the template page to generate from.
+        items:
+          type: array
+          description: The items to generate pages for.
+          items:
+            type: object
+        callbackUrl:
+          type: string
+          format: uri
+          description: Optional HTTPS URL that receives a POST on task completion.
+        publish:
+          type: boolean
+          description: Whether to publish the site after generation.
+    PromptTaskRequest:
+      type: object
+      required:
+      - siteId
+      - prompt
+      properties:
+        siteId:
+          type: string
+          description: The Flint site to operate on.
+        prompt:
+          type: string
+          description: Free-form instructions for the AI agent to modify the site.
+        command:
+          type: string
+          default: prompt
+          enum:
+          - prompt
+          description: Task command (defaults to prompt).
+        callbackUrl:
+          type: string
+          format: uri
+          description: Optional HTTPS URL that receives a POST on task completion.
+        publish:
+          type: boolean
+          description: Whether to publish the site after changes.
+    TaskStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - running
+          - completed
+          - failed
+        output:
+          type: object
+          description: Present when completed.
+          properties:
+            pagesCreated:
+              type: array
+              items:
+                type: string
+            pagesModified:
+              type: array
+              items:
+                type: string
+            pagesDeleted:
+              type: array
+              items:
+                type: string
+        errorMessage:
+          type: string
+          description: Present when failed.
+  securitySchemes:
+    bearerApiKey:
+      type: http
+      scheme: bearer
+      description: 'API key issued in Flint team settings (requires at least member role), sent as `Authorization: Bearer ak_your_api_key_here`.'
