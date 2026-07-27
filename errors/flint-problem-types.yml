@@ -1,0 +1,34 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flint-agent-tasks-openapi.yml
+docs: https://www.flint.com/docs/api
+format: http-status
+note: >-
+  Flint's Agent Tasks API documents plain HTTP status codes (not RFC 9457
+  application/problem+json). Failed asynchronous tasks surface an `errorMessage`
+  string on the task-status response envelope rather than an HTTP error.
+envelope:
+  async_failure_field: errorMessage
+  async_failure_operation: openapi/flint-agent-tasks-openapi.yml#getAgentTask
+problems:
+  - status: 400
+    title: Invalid input or missing configuration
+    remediation: Check required fields (siteId, prompt or command/templatePageSlug/items) and the request body shape.
+    source_operations:
+      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+  - status: 404
+    title: Site or task not found
+    remediation: Verify the siteId or taskId belongs to your account.
+    source_operations:
+      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+      - openapi/flint-agent-tasks-openapi.yml#getAgentTask
+  - status: 429
+    title: Too Many Requests
+    remediation: Rate limit exceeded; back off and retry.
+    source_operations:
+      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+  - status: 500
+    title: Server error
+    remediation: Retry later; contact support@tryflint.com if it persists.
+    source_operations:
+      - openapi/flint-agent-tasks-openapi.yml#createAgentTask

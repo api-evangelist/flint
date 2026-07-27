@@ -1,26 +1,130 @@
 aid: flint
 name: Flint
-description: 'Flint is a company surfaced as a portfolio company of accel and added to the API Evangelist
-  network as a stub for enrichment. Sector: ai. This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  Flint (Flint Technologies Inc., tryflint.com / flint.com) is an AI web
+  platform for marketing teams that programmatically generates on-brand,
+  high-converting landing pages and runs autonomous agents — including a Google
+  Ad agent — to keep ad accounts optimized. Its products are Pages
+  (AI-generated landing pages), Agents (autonomous campaign upkeep), and an
+  Agent Tasks REST API plus a hosted MCP server that let developers create,
+  modify, and publish pages from Claude, Clay, Relay.app, or any HTTP client.
+  Backed by Accel. This profile was enriched from Flint's public developer
+  documentation, MCP OAuth discovery metadata, and security surface.
 url: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - accel
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profiled
+x-tier-reason: enriched-from-docs
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.flint.com/
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-- Ai
-apis: []
+- AI
+- Marketing
+- Landing Pages
+- Agents
+- MCP
+- Web
+- Advertising
+apis:
+- aid: flint:flint-agent-tasks-api
+  name: Flint Agent Tasks API
+  description: Start and monitor background AI agent tasks on a Flint site.
+  humanURL: https://www.flint.com/docs/api
+  baseURL: https://app.tryflint.com/api/v1
+  tags:
+  - Agent Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/flint-agent-tasks-api-openapi.yml
+  - type: Authentication
+    url: authentication/flint-authentication.yml
+  - type: ErrorCatalog
+    url: errors/flint-problem-types.yml
+  - type: DataModel
+    url: data-model/flint-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/flint-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/flint-agentic-access.yml
 - type: Website
-  url: https://www.tryflint.com/
+  url: https://www.flint.com/
+- type: DeveloperPortal
+  url: https://www.flint.com/docs
+- type: Documentation
+  url: https://www.flint.com/docs
+- type: APIReference
+  url: https://www.flint.com/docs/api
+- type: GettingStarted
+  url: https://www.flint.com/docs/guides/flint-mcp-api
+- type: Pricing
+  url: https://www.flint.com/pricing
+- type: Blog
+  url: https://www.flint.com/blog
+- type: SignUp
+  url: https://app.tryflint.com/sign-up
+- type: Login
+  url: https://app.tryflint.com/sign-in
+- type: TermsOfService
+  url: https://www.flint.com/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.flint.com/privacy-policy
+- type: MCPServer
+  url: mcp/flint-mcp.yml
+- type: Authentication
+  url: authentication/flint-authentication.yml
+- type: OAuthScopes
+  url: scopes/flint-scopes.yml
+- type: Webhooks
+  url: asyncapi/flint-webhooks.yml
+- type: Conventions
+  url: conventions/flint-conventions.yml
+- type: Lifecycle
+  url: lifecycle/flint-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/flint-problem-types.yml
+- type: Conformance
+  url: conformance/flint-conformance.yml
+- type: DataModel
+  url: data-model/flint-data-model.yml
+- type: WellKnown
+  url: well-known/flint-well-known.yml
+- type: SecurityTxt
+  url: well-known/flint-security.txt
+- type: VulnerabilityDisclosure
+  url: security/flint-vulnerability-disclosure.yml
+- type: Security
+  url: https://www.flint.com/security/vdp
+- type: TrustCenter
+  url: security/flint-trust-center.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/flint-llms.txt
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

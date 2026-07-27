@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: searched
+status: published
+source: https://www.flint.com/docs/claude-mcp
+server:
+  name: flint
+  transport: http
+  url: https://mcp.tryflint.com/mcp
+  description: >-
+    Flint's official hosted remote MCP server (HTTP/SSE). Add it as a custom
+    connector in Claude (claude.ai/settings/connectors) or any MCP-compatible
+    client; sign in to your Flint account to authorize.
+authorization:
+  type: oauth2
+  protected_resource: https://mcp.tryflint.com
+  authorization_server: https://clerk.tryflint.com
+  authorization_endpoint: https://clerk.tryflint.com/oauth/authorize
+  token_endpoint: https://clerk.tryflint.com/oauth/token
+  registration_endpoint: https://clerk.tryflint.com/oauth/register
+  grant_types: [authorization_code, refresh_token]
+  code_challenge_methods: [S256]
+  scopes_advertised: [openid, offline_access]
+  source: https://mcp.tryflint.com/.well-known/oauth-protected-resource
+tools:
+  - name: run_background_agent
+    description: >-
+      Start a background AI agent on a Flint site. The agent executes a prompt
+      to modify your website.
+    source_operation: openapi/flint-agent-tasks-openapi.yml#createAgentTask
+  - name: check_background_agent_status
+    description: Check the status of a previously started background agent.
+    source_operation: openapi/flint-agent-tasks-openapi.yml#getAgentTask
+  - name: list_sites
+    description: Lists all Flint sites accessible to your account.
+  - name: publish_site
+    description: Deploys a Flint site to production.
+clients_documented:
+  - Claude (claude.ai custom connector)
+  - Claude Code

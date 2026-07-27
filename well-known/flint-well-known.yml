@@ -1,0 +1,28 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.flint.com/.well-known/security.txt
+hosts:
+  - host: https://www.flint.com
+    documents:
+      - path: /.well-known/security.txt   # RFC 9116
+        status: 200
+        file: flint-security.txt
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+  - host: https://app.tryflint.com
+    note: >-
+      All /.well-known/* and /llms.txt paths return HTTP 200 but serve the SPA
+      HTML shell (soft-404), not real discovery documents. Not indexed.
+  - host: https://mcp.tryflint.com
+    documents:
+      - path: /.well-known/oauth-protected-resource   # RFC 9728
+        status: 200
+        file: flint-mcp-oauth-protected-resource.json
+      - path: /.well-known/security.txt
+        status: 404

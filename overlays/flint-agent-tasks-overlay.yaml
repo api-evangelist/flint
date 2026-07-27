@@ -1,0 +1,19 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Flint Agent Tasks API
+  version: 1.0.0
+extends: openapi/flint-agent-tasks-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: true
+      x-apievangelist-async: true
+      x-apievangelist-mcp-server: https://mcp.tryflint.com/mcp
+  - target: $.paths['/agent/tasks'].post
+    update:
+      x-apievangelist-webhook: task.completed
+      x-apievangelist-idempotency: none
+  - target: $.paths['/agent/tasks/{taskId}'].get
+    update:
+      x-apievangelist-poll: true
+      x-apievangelist-terminal-states: [completed, failed]

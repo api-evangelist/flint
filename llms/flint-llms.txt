@@ -1,0 +1,32 @@
+# Flint
+
+> Flint is an AI web platform for marketing teams that generates on-brand,
+> high-converting landing pages and runs autonomous agents (including a Google
+> Ad agent) to maintain ad accounts. Its Agent Tasks REST API and hosted MCP
+> server let you create and modify pages programmatically from Claude, Clay,
+> Relay.app, or any HTTP client.
+
+## APIs
+- [Agent Tasks API reference](https://www.flint.com/docs/api): REST API to start background agent tasks (prompt or generate_pages) and poll status. Base URL https://app.tryflint.com/api/v1.
+- [Flint MCP + API guide](https://www.flint.com/docs/guides/flint-mcp-api): overview of programmatic page generation.
+- [Claude MCP integration](https://www.flint.com/docs/claude-mcp): hosted MCP server at https://mcp.tryflint.com/mcp (tools: run_background_agent, check_background_agent_status, list_sites, publish_site).
+
+## Docs
+- [Documentation](https://www.flint.com/docs)
+- [Pricing](https://www.flint.com/pricing)
+- [Blog](https://www.flint.com/blog)
+- [Customers](https://www.flint.com/customers)
+
+## Security
+- [security.txt](https://www.flint.com/.well-known/security.txt)
+- [Vulnerability disclosure policy](https://www.flint.com/security/vdp)
+- [Security overview](https://www.flint.com/security)
+
+## Legal
+- [Terms of Service](https://www.flint.com/terms-of-service)
+- [Privacy Policy](https://www.flint.com/privacy-policy)
+
+## Artifacts (API Evangelist enrichment)
+- OpenAPI: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/openapi/flint-agent-tasks-openapi.yml
+- MCP: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/mcp/flint-mcp.yml
+- Authentication: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/authentication/flint-authentication.yml

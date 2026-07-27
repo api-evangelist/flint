@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.flint.com/docs/api
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://app.tryflint.com/api/v1
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation or Sunset/Deprecation-header policy found.
+sla:
+  url: null
+  uptime_target: null
+status_page:
+  url: null
+  note: >-
+    No public status page found (status.flint.com, status.tryflint.com, and
+    /status all return 404 as of this probe).
+deprecated_operations: []

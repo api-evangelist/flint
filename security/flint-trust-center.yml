@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: searched
+probe: true
+url: https://www.flint.com/security
+certifications:
+- name: SOC 2 Type II
+  status: preparing
+  scope: >-
+    Audited controls for security, availability, and confidentiality trust
+    service principles. Listed as "Preparing" on the security page — not yet an
+    achieved certification.
+security_contact: security@tryflint.com
+note: >-
+  Flint publishes a lightweight security page describing comprehensive controls
+  under monitoring and SOC 2 Type II preparation. No trust-portal (Vanta/Drata)
+  URL is published; there are no achieved third-party certifications yet, so no
+  Compliance pointer is emitted.
+evidence:
+- source: https://www.flint.com/security
+  keywords: [soc 2 type ii, security controls, availability, confidentiality]

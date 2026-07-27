@@ -1,0 +1,33 @@
+generated: '2026-07-19'
+method: searched
+source: https://mcp.tryflint.com/.well-known/oauth-protected-resource
+docs: https://clerk.tryflint.com/.well-known/oauth-authorization-server
+note: >-
+  OAuth applies to Flint's hosted MCP server only (the REST Agent Tasks API uses
+  a bearer API key with no scope surface). The MCP protected-resource metadata
+  advertises openid + offline_access; the Clerk authorization server exposes the
+  full standard Clerk OIDC scope set below.
+schemes:
+  - name: mcpOAuth
+    source: https://mcp.tryflint.com
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://clerk.tryflint.com/oauth/authorize
+        tokenUrl: https://clerk.tryflint.com/oauth/token
+scopes:
+  - scope: openid
+    description: OpenID Connect authentication; issue an ID token.
+    advertised_by_resource: true
+  - scope: offline_access
+    description: Issue a refresh token for long-lived access.
+    advertised_by_resource: true
+  - scope: profile
+    description: Access the user's basic profile claims.
+  - scope: email
+    description: Access the user's email address.
+  - scope: public_metadata
+    description: Read the user's public metadata.
+  - scope: private_metadata
+    description: Read the user's private metadata.
+  - scope: "user:org:read"
+    description: Read the user's organization membership.

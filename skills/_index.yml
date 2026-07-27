@@ -1,0 +1,12 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/flint-agent-tasks-openapi.yml
+skills:
+  - file: flint-generate-landing-pages.md
+    name: Generate on-brand landing pages from a template
+    api: openapi/flint-agent-tasks-openapi.yml
+    operations: [createAgentTask, getAgentTask]
+  - file: flint-prompt-edit-site.md
+    name: Modify a Flint site with a prompt agent
+    api: openapi/flint-agent-tasks-openapi.yml
+    operations: [createAgentTask, getAgentTask]

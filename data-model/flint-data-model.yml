@@ -1,0 +1,39 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flint-agent-tasks-openapi.yml
+docs: https://www.flint.com/docs
+note: >-
+  Derived from the Agent Tasks API and the documentation's domain concepts
+  (sites, pages, templates, agent tasks). Field-level id prefixes are not fully
+  published; taskId uses a `bg-<uuid>-<suffix>` form and API keys use an `ak_`
+  prefix.
+entities:
+  - name: Site
+    description: A Flint website that pages belong to and agents operate on.
+    id_field: siteId
+    relationships:
+      - has_many: Page
+      - has_many: AgentTask
+  - name: Page
+    description: A landing page within a site; created/modified/deleted by agent tasks.
+    relationships:
+      - belongs_to: Site
+      - generated_from: Template
+  - name: Template
+    description: A template page used by generate_pages tasks to produce many pages.
+    id_field: templatePageSlug
+    relationships:
+      - belongs_to: Site
+  - name: AgentTask
+    description: An asynchronous background agent run against a site.
+    id_field: taskId
+    id_prefix: "bg-"
+    states: [running, completed, failed]
+    relationships:
+      - belongs_to: Site
+      - produces: Page   # via output.pagesCreated / pagesModified / pagesDeleted
+  - name: ApiKey
+    description: A team API key used to authenticate the REST API.
+    id_prefix: "ak_"
+    relationships:
+      - belongs_to: Team

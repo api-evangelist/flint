@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.flint.com/docs/api
+type: Webhooks
+spec_type: webhook-catalog
+note: >-
+  Flint does not publish an AsyncAPI document. Its event surface is a single
+  completion webhook: when a task is created with an optional `callbackUrl`
+  (HTTPS only), Flint POSTs to that URL when the background agent task finishes.
+delivery:
+  transport: HTTPS POST
+  subscription: per-task via the `callbackUrl` field on createAgentTask
+  security: caller-controlled HTTPS endpoint
+events:
+  - name: task.completed
+    trigger: A background agent task finishes (success or failure).
+    source_operation: openapi/flint-agent-tasks-openapi.yml#createAgentTask
+    payload_fields:
+      - taskId
+      - status        # completed | failed
+      - pages         # present on success
+      - error         # present on failure
+      - timestamp

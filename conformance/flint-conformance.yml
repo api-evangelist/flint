@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/flint-agent-tasks-openapi.yml
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: MCP server is an OAuth 2.0 protected resource (Clerk authorization server, authorization_code + refresh_token).
+  - id: oidc
+    conforms: true
+    evidence: Clerk authorization server publishes an openid-configuration and supports the openid scope.
+  - id: pkce
+    conforms: true
+    evidence: code_challenge_methods_supported includes S256.
+  - id: rfc9728-oauth-protected-resource
+    conforms: true
+    evidence: /.well-known/oauth-protected-resource served at mcp.tryflint.com.
+  - id: rfc9116-security-txt
+    conforms: true
+    evidence: /.well-known/security.txt served at www.flint.com.
+  - id: mcp
+    conforms: true
+    evidence: Official hosted MCP server at https://mcp.tryflint.com/mcp (HTTP/SSE).
+  - id: webhooks
+    conforms: true
+    evidence: Per-task completion callback (callbackUrl, HTTPS POST).
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: REST API returns plain HTTP status codes, not application/problem+json.
+  - id: bearer-token-auth
+    conforms: true
+    evidence: REST API uses Authorization Bearer API key.

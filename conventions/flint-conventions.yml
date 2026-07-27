@@ -1,0 +1,45 @@
+generated: '2026-07-19'
+method: searched
+source: https://www.flint.com/docs/api
+docs: https://www.flint.com/docs/api
+authentication:
+  rest: "Bearer API key (Authorization: Bearer ak_...) — see authentication/flint-authentication.yml"
+  mcp: "OAuth 2.0 via Clerk — see authentication/flint-authentication.yml"
+async_execution:
+  model: >-
+    Agent tasks are asynchronous. createAgentTask returns a taskId with
+    status "running"; the caller either polls getAgentTask or supplies a
+    callbackUrl to be notified on completion.
+  states: [running, completed, failed]
+  identifier: taskId
+idempotency:
+  supported: false
+  note: >-
+    Flint's Agent Tasks API does not document an idempotency-key header or
+    parameter. Each POST /agent/tasks starts a new background task.
+pagination:
+  supported: false
+  note: No list endpoints with pagination are documented in the REST API.
+webhooks:
+  supported: true
+  mechanism: callbackUrl
+  transport: HTTPS POST
+  trigger: task completion
+  payload_fields: [taskId, status, pages, error, timestamp]
+  detail: See asyncapi/flint-webhooks.yml
+rate_limiting:
+  supported: true
+  signal: HTTP 429 Too Many Requests
+  note: Rate limits exist; exceeding them returns 429. Specific limits are not published.
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://app.tryflint.com/api/v1
+error_handling:
+  rest: Plain HTTP status codes (400/404/429/500) — see errors/flint-problem-types.yml
+  async: Failed tasks return an errorMessage string on the task-status response.
+cross_links:
+  errors: errors/flint-problem-types.yml
+  lifecycle: lifecycle/flint-lifecycle.yml
+  authentication: authentication/flint-authentication.yml
+  webhooks: asyncapi/flint-webhooks.yml

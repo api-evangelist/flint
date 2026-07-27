@@ -1,0 +1,16 @@
+# Flint Technologies Inc. security contacts and policy
+
+# Our security contact channels
+Contact: mailto:security@tryflint.com
+
+# PGP key
+Encryption: https://tryflint.com/pgp-key.asc
+
+# Link to our vulnerability disclosure policy
+Policy: https://www.flint.com/security/vdp
+
+# Languages that our team speaks and understands
+Preferred-Languages: en-US
+
+# Expiration date for this security.txt file
+Expires: 2027-03-18T02:44:52z

@@ -1,0 +1,10 @@
+{
+  "resource": "https://mcp.tryflint.com",
+  "authorization_servers": [
+    "https://clerk.tryflint.com"
+  ],
+  "scopes_supported": [
+    "openid",
+    "offline_access"
+  ]
+}
