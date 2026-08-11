@@ -65,6 +65,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/flint-agent-tasks-overlay.yaml
 - type: DomainSecurity
   url: security/flint-domain-security.yml
 - type: AgenticAccess
