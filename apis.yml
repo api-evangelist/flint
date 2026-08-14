@@ -18,21 +18,27 @@ x-backed-by:
 x-tier: profiled
 x-tier-reason: enriched-from-docs
 accessModel:
-  pricing: unknown
+  pricing: freemium
   onboarding: self-serve
-  trial: false
+  trial: true
   try_now: false
   public: false
-  label: Self-serve signup
-  confidence: medium
+  label: Free tier plus 14-day paid trial
+  confidence: high
   source:
+  - https://www.flint.com/pricing
+  - plans/flint-plans-pricing.yml
   - authentication
-  generated: '2026-07-22'
-  method: derived
-image: https://www.flint.com/
+  note: >-
+    Free plan at $0/month with 160 credits and API + MCP page creation included;
+    Starter at $96/month with a 14-day free trial, no credit card required.
+    Metered in credits, not API calls.
+  generated: '2026-08-13'
+  method: searched
+image: https://www.flint.com/images/favicon-144x144.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-13'
 tags:
 - Company
 - AI
@@ -42,6 +48,8 @@ tags:
 - MCP
 - Web
 - Advertising
+- Google Ads
+- Website Builder
 apis:
 - aid: flint:flint-agent-tasks-api
   name: Flint Agent Tasks API
@@ -59,6 +67,33 @@ apis:
     url: errors/flint-problem-types.yml
   - type: DataModel
     url: data-model/flint-data-model.yml
+  - type: Overlay
+    url: overlays/flint-agent-tasks-overlay.yaml
+  - type: RateLimits
+    url: rate-limits/flint-rate-limits.yml
+- aid: flint:flint-mcp-server
+  name: Flint MCP Server
+  description: >-
+    Flint's official hosted remote MCP server. Four tools — list_sites,
+    run_background_agent, check_background_agent_status and publish_site — let
+    an MCP client discover Flint sites, run background design agents against
+    them, poll progress, and deploy to production. OAuth 2.0 via Clerk.
+  humanURL: https://www.flint.com/docs/claude-code-mcp
+  baseURL: https://mcp.tryflint.com/mcp
+  tags:
+  - MCP
+  - Agents
+  properties:
+  - type: MCPServer
+    url: mcp/flint-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/flint-tool-crosswalk.yml
+  - type: OAuthScopes
+    url: scopes/flint-scopes.yml
+  - type: Authentication
+    url: authentication/flint-authentication.yml
+  - type: AgentSkill
+    url: skills/flint-edit-site.md
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -125,8 +160,42 @@ common:
   url: skills/_index.yml
 - type: LLMsTxt
   url: llms/flint-llms.txt
+- type: ToolCrosswalk
+  url: mcp/flint-tool-crosswalk.yml
+- type: Packages
+  url: packages/flint-packages.yml
+- type: Plans
+  url: plans/flint-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/flint-rate-limits.yml
+- type: ChangeLog
+  url: changelog/flint-changelog.yml
+- type: StatusPage
+  url: https://www.flint.com/status
+- type: SLA
+  url: https://www.flint.com/docs/slas
+- type: Compliance
+  url: https://www.flint.com/docs/data-residency-gdpr
+- type: Support
+  url: https://www.flint.com/contact-support
+- type: GitHubOrganization
+  url: https://github.com/tryflint
+- type: SourceCode
+  url: https://github.com/tryflint/claude-code-plugin
+- type: Guides
+  url: https://www.flint.com/docs/guides
+- type: FAQ
+  url: https://www.flint.com/docs/faq
+- type: Careers
+  url: https://www.flint.com/careers
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 7
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
+  note: >-
+    Round 2. Found Flint's real Atlassian status page and published SLA, its
+    first-party Claude Code plugin (with a provider-authored agent skill and a
+    Keep-a-Changelog CHANGELOG), the full credit-based pricing model, and the
+    published MCP tool parameter tables. No OpenAPI, llms.txt, A2A agent card,
+    AsyncAPI or client SDK is published by Flint.
