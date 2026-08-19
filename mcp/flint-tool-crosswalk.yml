@@ -1,0 +1,116 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  https://www.flint.com/docs/claude-code-mcp (published tool + parameter
+  reference) bound to openapi/flint-agent-tasks-api-openapi.yml
+note: >-
+  Flint's live MCP endpoint is OAuth-gated — POST tools/list to
+  https://mcp.tryflint.com/mcp returns HTTP 401
+  {"error":"invalid_token","error_description":"No authorization provided"} —
+  so the tool inputSchemas below are NOT read from the live server. They are
+  taken from Flint's own published parameter tables on
+  /docs/claude-code-mcp, which name each parameter and its type, and bound to
+  the REST operations by semantics. Confidence is set accordingly. Exact JSON
+  Schema shapes still require an authenticated tools/list introspection.
+surfaces:
+  openapi:
+    file: openapi/flint-agent-tasks-api-openapi.yml
+    base_url: https://app.tryflint.com/api/v1
+    gated: false
+    auth: bearer API key (ak_)
+  mcp:
+    url: https://mcp.tryflint.com/mcp
+    transport: http
+    gated: true
+    gate: OAuth 2.0 (Clerk) — anonymous tools/list returns 401 invalid_token
+    tool_source: https://www.flint.com/docs/claude-code-mcp
+  graphql:
+    present: false
+crosswalk:
+  - tool: run_background_agent
+    category: agent-tasks
+    rest:
+      - createAgentTask
+    binding: direct
+    confidence: high
+    inputs_documented:
+      - name: siteId
+        type: string (UUID)
+        rest_field: siteId
+      - name: prompt
+        type: string
+        rest_field: prompt
+    returns: workflow ID
+    note: >-
+      Maps to POST /agent/tasks with command "prompt". The MCP tool exposes only
+      siteId + prompt; the REST operation additionally accepts command,
+      callbackUrl and publish. The tool's returned "workflowId" is the REST
+      response's `taskId` under a different name — a naming divergence agents
+      must not assume away.
+  - tool: check_background_agent_status
+    category: agent-tasks
+    rest:
+      - getAgentTask
+    binding: direct
+    confidence: high
+    inputs_documented:
+      - name: workflowId
+        type: string
+        rest_field: taskId
+    returns: current status, phase, and output when completed
+    note: >-
+      Maps to GET /agent/tasks/{taskId}. The tool additionally returns a
+      "phase" field that the documented REST response does not carry.
+  - tool: list_sites
+    category: sites
+    rest: []
+    binding: none
+    confidence: high
+    note: >-
+      No public REST operation lists sites. See mcp_only below — this is the
+      single largest REST gap, because siteId is required by every REST call
+      and there is no public way to discover it over HTTP.
+  - tool: publish_site
+    category: publishing
+    rest: []
+    binding: partial
+    confidence: medium
+    inputs_documented:
+      - name: siteId
+        type: string (UUID)
+    note: >-
+      No dedicated REST publish operation exists. The nearest REST equivalent is
+      the boolean `publish: true` flag on createAgentTask, which triggers a
+      production deployment as a side effect of an agent task. publish_site
+      publishes standalone — it resolves the latest staging changes and triggers
+      a production deployment with no agent run — so this is a partial, not a
+      direct, binding.
+mcp_only:
+  - tool: list_sites
+    reason: >-
+      Site discovery is not exposed on the public REST API; siteId must be
+      obtained from the Flint app UI or the MCP server.
+  - tool: publish_site
+    reason: >-
+      Standalone publish/deploy has no public REST operation; REST can only
+      publish as a side effect of an agent task via `publish: true`.
+rest_only:
+  - operation: createAgentTask
+    surface_gap: >-
+      The generate_pages command (templatePageSlug + items[1-10] bulk page
+      generation) is REST-only. No MCP tool exposes templated bulk generation;
+      an MCP client must express it as a free-form prompt.
+    fields_not_in_mcp:
+      - command (generate_pages)
+      - templatePageSlug
+      - items
+      - callbackUrl
+      - publish
+coverage:
+  mcp_tools: 4
+  rest_operations: 2
+  tools_bound_to_rest: 2
+  tools_mcp_only: 2
+  rest_operations_with_a_tool: 2
+  rest_operations_without_a_tool: 0
+  rest_fields_unreachable_from_mcp: 5

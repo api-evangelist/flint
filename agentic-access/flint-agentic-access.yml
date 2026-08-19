@@ -1,6 +1,6 @@
 generated: '2026-07-19'
 method: generated
-source: openapi/flint-agent-tasks-openapi.yml
+source: openapi/flint-agent-tasks-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.

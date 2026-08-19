@@ -1,39 +1,146 @@
-generated: '2026-07-19'
-method: derived
-source: openapi/flint-agent-tasks-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: https://www.flint.com/docs/api
+also_derived_from: openapi/flint-agent-tasks-api-openapi.yml
 docs: https://www.flint.com/docs
 note: >-
-  Derived from the Agent Tasks API and the documentation's domain concepts
-  (sites, pages, templates, agent tasks). Field-level id prefixes are not fully
-  published; taskId uses a `bg-<uuid>-<suffix>` form and API keys use an `ak_`
-  prefix.
+  Derived from the Agent Tasks API and enriched from the published reference
+  tables at /docs/api and the MCP tool reference at /docs/claude-code-mcp.
+  Identifier forms: siteId is a UUID, taskId uses a `bg-<site-uuid>-<suffix>`
+  form, and API keys use an `ak_` prefix. Organizations appear only on the MCP
+  surface (list_sites returns organization ID and name); there is no public
+  REST representation of them.
+id_prefixes:
+  taskId: "bg-"
+  api_key: "ak_"
+  siteId: UUID (no prefix)
 entities:
+  - name: Organization
+    description: >-
+      The account that owns sites and API keys. Surfaced only by the MCP
+      list_sites tool, which returns organization ID and organization name.
+    id_field: organizationId
+    source: https://www.flint.com/docs/claude-code-mcp
+    relationships:
+      - has_many: Site
+      - has_many: ApiKey
   - name: Site
     description: A Flint website that pages belong to and agents operate on.
     id_field: siteId
+    id_format: UUID
+    fields:
+      - name: name
+        source: MCP list_sites
+      - name: siteId
+      - name: organizationId
+      - name: organizationName
     relationships:
+      - belongs_to: Organization
       - has_many: Page
       - has_many: AgentTask
   - name: Page
-    description: A landing page within a site; created/modified/deleted by agent tasks.
+    description: >-
+      A landing page within a site; created, modified or deleted by agent tasks.
+      Returned inside AgentTask.output as an object, not a bare slug.
+    id_field: slug
+    fields:
+      - name: slug
+        type: string
+        description: The page path (e.g. /about).
+      - name: previewUrl
+        type: string (uri)
+        description: Staging preview URL (e.g. a *.vercel.app preview host).
+      - name: editUrl
+        type: string (uri)
+        description: Deep link into the Flint editor for that page.
+      - name: publishedUrl
+        type: string (uri)
+        description: Production URL on the customer domain, present once published.
     relationships:
       - belongs_to: Site
       - generated_from: Template
   - name: Template
-    description: A template page used by generate_pages tasks to produce many pages.
+    description: >-
+      An existing page on the site used by generate_pages tasks as the design
+      template; each generated page inherits its layout and design.
     id_field: templatePageSlug
     relationships:
       - belongs_to: Site
+      - produces: Page
+  - name: GenerationItem
+    description: >-
+      One unit of work inside a generate_pages task — the target path plus the
+      content/data for that page. Capped at 1-10 items per task.
+    fields:
+      - name: targetPageSlug
+        type: string
+        required: true
+        description: The path for the new page.
+      - name: context
+        type: string
+        required: true
+        description: The content or data for this specific page.
+    relationships:
+      - belongs_to: AgentTask
+      - produces: Page
   - name: AgentTask
     description: An asynchronous background agent run against a site.
     id_field: taskId
     id_prefix: "bg-"
+    id_alias: workflowId (MCP surface)
     states: [running, completed, failed]
+    fields:
+      - name: taskId
+      - name: status
+      - name: createdAt
+        type: string (date-time)
+      - name: output
+        type: object
+        description: Present when completed — pagesCreated, pagesModified, pagesDeleted.
+      - name: errorMessage
+        type: string
+        description: Present when failed.
+      - name: phase
+        type: string
+        description: Returned by the MCP check_background_agent_status tool only; not documented on the REST response.
     relationships:
       - belongs_to: Site
+      - has_many: GenerationItem
       - produces: Page   # via output.pagesCreated / pagesModified / pagesDeleted
   - name: ApiKey
-    description: A team API key used to authenticate the REST API.
+    description: >-
+      A team API key used to authenticate the REST API. Created in Flint team
+      settings, scoped to the organization, requires at least member role.
     id_prefix: "ak_"
     relationships:
-      - belongs_to: Team
+      - belongs_to: Organization
+relationships_graph:
+  - from: Organization
+    to: Site
+    kind: has_many
+  - from: Site
+    to: Page
+    kind: has_many
+  - from: Site
+    to: AgentTask
+    kind: has_many
+    via: siteId
+  - from: AgentTask
+    to: Page
+    kind: has_many
+    via: output.pagesCreated / pagesModified / pagesDeleted
+  - from: AgentTask
+    to: GenerationItem
+    kind: has_many
+    via: items
+  - from: GenerationItem
+    to: Page
+    kind: has_one
+    via: targetPageSlug
+  - from: Template
+    to: Page
+    kind: has_many
+    via: templatePageSlug
+  - from: ApiKey
+    to: Organization
+    kind: belongs_to

@@ -20,7 +20,7 @@ schemes:
     provisioning: >-
       API keys are created in Flint team settings and require at least member
       role permissions.
-    sources: [openapi/flint-agent-tasks-openapi.yml, https://www.flint.com/docs/api]
+    sources: [openapi/flint-agent-tasks-api-openapi.yml, https://www.flint.com/docs/api]
   - name: mcpOAuth
     type: oauth2
     surface: mcp

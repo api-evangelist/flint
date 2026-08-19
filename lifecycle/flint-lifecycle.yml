@@ -1,20 +1,86 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
-source: https://www.flint.com/docs/api
+source: https://www.flint.com/docs/slas
 versioning:
   scheme: uri-path
   current: v1
   base_url: https://app.tryflint.com/api/v1
+  policy_url: null
+  note: No published API versioning policy; v1 is the only version ever shipped.
 deprecation:
   policy_url: null
   sunset_header: false
-  note: No published deprecation or Sunset/Deprecation-header policy found.
-sla:
-  url: null
-  uptime_target: null
-status_page:
-  url: null
   note: >-
-    No public status page found (status.flint.com, status.tryflint.com, and
-    /status all return 404 as of this probe).
+    No published deprecation or Sunset/Deprecation-header policy (RFC 8594).
+    Flint publishes no API changelog either — see changelog/flint-changelog.yml.
+sla:
+  published: true
+  url: https://www.flint.com/docs/slas
+  uptime_target: 99.9%
+  uptime_timeframe: during subscription term
+  performance:
+    - metric: Flint page load time
+      target: "<=3 seconds (p95)"
+      timeframe: measured monthly
+      note: Continuously monitored; reported as monthly p95.
+  downtime_definition: >-
+    Any period over five (5) minutes where the Flint service returns 5xx
+    responses. Excludes unavailability caused by customer-specific
+    configuration logic.
+  scheduled_maintenance: >-
+    Planned maintenance performed outside business hours (Mon-Fri 9:00am-5:00pm
+    Pacific), or communicated in writing at least 14 days ahead for downtime
+    exceeding one day / 7 days ahead for downtime under one day.
+  incident_response:
+    - severity: Sev1
+      definition: Complete service outage affecting all customers (5xx for >5 minutes; pages inaccessible).
+      initial_response: "<1 hour"
+      resolution: "<12 hours"
+    - severity: Sev2
+      definition: Major functionality impaired or significantly degraded performance.
+      initial_response: "<4 hours"
+      resolution: "<24 hours"
+  support_hours: 9:00 AM - 5:00 PM Pacific, Monday-Friday, excluding U.S. federal holidays
+  emergency_support: 24/7 monitoring and response for Sev1 and Sev2
+  service_credits:
+    offered: true
+    cap: 10% of monthly fees
+    issued_within_days: 90
+    form: reduction in fees owed, applied monthly
+    note: >-
+      Credits are explicitly NOT the customer's sole and exclusive remedy, and
+      are not construed as a penalty or liquidated damages.
+  scope_note: >-
+    The SLA is written against "the Flint Service" and Flint page availability.
+    It does not carve out or separately commit to the Agent Tasks API or the
+    hosted MCP endpoint.
+status_page:
+  url: https://www.flint.com/status
+  provider: Atlassian Statuspage
+  canonical_host: https://flint1.statuspage.io
+  api: https://flint1.statuspage.io/api/v2/summary.json
+  feeds:
+    - https://flint1.statuspage.io/history.atom
+    - https://flint1.statuspage.io/history.rss
+  components:
+    - API
+    - Page Builder
+    - Hosting
+  observed:
+    checked: '2026-08-13'
+    indicator: none
+    description: All Systems Operational
+    incidents_open: 0
+    page_updated_at: '2026-06-09T01:58:55.978Z'
+  subscriptions: [email, slack, atom, rss]
+  ownership_note: >-
+    https://www.flint.com/status 302s to https://flint1.statuspage.io
+    (page id wqj5t9mymbgg) and its components are Flint-specific (API, Page
+    Builder, Hosting). The similarly-named https://flint.statuspage.io is a
+    DIFFERENT, unrelated page — its components are Statuspage sample data
+    ("Its a coolio API", "Management Portal (example)") created in 2020, years
+    before Flint Technologies existed. Only the flint1 page is Flint's.
 deprecated_operations: []
+cross_links:
+  changelog: changelog/flint-changelog.yml
+  conventions: conventions/flint-conventions.yml

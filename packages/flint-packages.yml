@@ -1,0 +1,52 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/tryflint/claude-code-plugin
+docs: https://www.flint.com/docs/claude-code-plugin
+note: >-
+  Flint publishes NO traditional client SDK. Searches of npm, PyPI, RubyGems,
+  crates.io, Packagist, NuGet, Maven Central and pkg.go.dev returned no
+  first-party Flint (Flint Technologies, Inc. / tryflint.com) client library —
+  the npm packages named "flint", "flint-js", "flint-chart" and "@flint.fyi/*"
+  belong to unrelated projects and are NOT this company. The only first-party
+  distributable Flint ships is a Claude Code plugin published from its own
+  GitHub organization (github.com/tryflint), which bundles the hosted MCP
+  server config plus an agent skill. Flint's documented integration path for
+  everything else is the raw REST API or the hosted MCP endpoint.
+packages:
+  - name: flint
+    kind: claude-code-plugin
+    official: true
+    registry: claude-code-marketplace
+    install: "/plugin install flint"
+    repository: https://github.com/tryflint/claude-code-plugin
+    homepage: https://www.flint.com/docs/claude-code-plugin
+    license: MIT
+    version: 1.1.0
+    published: '2026-03-26'
+    version_source: >-
+      .claude-plugin/plugin.json on the main branch declares version 1.1.0; the
+      repository has no git tags and no GitHub releases, so `published` is the
+      last push date to main (2026-03-26). CHANGELOG.md documents only 1.0.0
+      (2026-03-24), so the 1.1.0 bump is undocumented.
+    contains:
+      - "Flint MCP server config (.mcp.json -> https://mcp.tryflint.com/mcp, transport http)"
+      - "edit-site agent skill (skills/edit-site/SKILL.md)"
+      - "OAuth authentication flow to the Flint account"
+    tools:
+      - list_sites
+      - run_background_agent
+      - check_background_agent_status
+      - publish_site
+registries_checked:
+  - registry: npm
+    query: ["flint", "tryflint", "flint mcp"]
+    result: no first-party package
+  - registry: pypi
+    query: ["flint-sdk", "tryflint", "flint-api"]
+    result: 404 on all
+  - registry: github
+    org: tryflint
+    result: >-
+      2 public repos — claude-code-plugin (first-party, recorded above) and
+      block-builder (a React/Hono/SQLite demo app, not a client library;
+      last pushed 2025-11-26, no license, no package publish).

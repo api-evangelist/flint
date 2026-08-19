@@ -1,19 +1,86 @@
 overlay: 1.0.0
 info:
   title: API Evangelist enhancements for Flint Agent Tasks API
-  version: 1.0.0
-extends: openapi/flint-agent-tasks-openapi.yml
+  version: 1.1.0
+extends: openapi/flint-agent-tasks-api-openapi.yml
+x-generated: '2026-08-13'
+x-method: derived
+x-source: >-
+  https://www.flint.com/docs/api and https://www.flint.com/docs/claude-code-mcp
+  — published constraints and response fields the derived OpenAPI does not carry.
 actions:
   - target: $.info
     update:
       x-apievangelist-enriched: true
       x-apievangelist-async: true
       x-apievangelist-mcp-server: https://mcp.tryflint.com/mcp
+      x-apievangelist-status-page: https://www.flint.com/status
+      x-apievangelist-sla: https://www.flint.com/docs/slas
+      x-apievangelist-metering: credits
+      x-apievangelist-error-envelope: '{"error": "<message>"}'
   - target: $.paths['/agent/tasks'].post
     update:
       x-apievangelist-webhook: task.completed
       x-apievangelist-idempotency: none
+      x-apievangelist-idempotency-warning: >-
+        No idempotency key. A blind retry starts a second task and consumes a
+        second charge of credits — poll before retrying.
+      x-apievangelist-rate-limit: undocumented (429 on exhaustion, no headers published)
   - target: $.paths['/agent/tasks/{taskId}'].get
     update:
       x-apievangelist-poll: true
       x-apievangelist-terminal-states: [completed, failed]
+      x-apievangelist-poll-interval-seconds: 90
+      x-apievangelist-typical-duration-minutes: 5
+      x-apievangelist-failure-on-2xx: >-
+        Returns HTTP 200 with status "failed" and an errorMessage when the agent
+        run fails; 2xx does not mean success.
+  - target: $.components.schemas.GeneratePagesRequest.properties.items
+    update:
+      minItems: 1
+      maxItems: 10
+      items:
+        type: object
+        required: [targetPageSlug, context]
+        properties:
+          targetPageSlug:
+            type: string
+            description: The path for the new page (e.g. /case-studies/acme-corp).
+          context:
+            type: string
+            description: The content or data for this specific page.
+      description: 1-10 items to generate, one page per item.
+  - target: $.components.schemas.TaskStatus.properties.output.properties.pagesCreated
+    update:
+      items:
+        type: object
+        properties:
+          slug:
+            type: string
+            description: The page path (e.g. /about).
+          previewUrl:
+            type: string
+            format: uri
+            description: Staging preview URL.
+          editUrl:
+            type: string
+            format: uri
+            description: Deep link into the Flint editor.
+          publishedUrl:
+            type: string
+            format: uri
+            description: Production URL on the customer domain, present once published.
+  - target: $.components.schemas.PromptTaskRequest.properties.publish
+    update:
+      default: false
+      description: >-
+        When true, generated pages are immediately visible on the live site and
+        a production deployment is triggered. When false (default), no
+        production deployment is triggered but preview URLs remain accessible.
+  - target: $.components.schemas.GeneratePagesRequest.properties.publish
+    update:
+      default: false
+      description: >-
+        When true, generated pages are immediately visible on the live site and
+        a production deployment is triggered. When false (default), no
+        production deployment is triggered but preview URLs remain accessible.

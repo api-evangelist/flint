@@ -1,0 +1,57 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.flint.com/docs/api
+docs: https://www.flint.com/docs/api
+limit_count: 0
+note: >-
+  Flint DOCUMENTS that the Agent Tasks API is rate limited and that exceeding
+  the limit returns 429 Too Many Requests, but publishes NO number, NO window,
+  NO scope and NO response headers. Its rate-limiting section is one sentence:
+  "These endpoints are rate limited. If you exceed the limit, you'll receive a
+  429 Too Many Requests response." An integrator cannot compute a safe request
+  rate or a backoff from what is published, and no RateLimit-*/X-RateLimit-*
+  header contract is described anywhere in the reference. Limits could not be
+  observed live because every endpoint requires a bearer API key (no
+  unauthenticated response to read headers from).
+limits: []
+exhaustion:
+  status_code: 429
+  reason_phrase: Too Many Requests
+  body: not documented
+  retry_after_header: not documented
+  documented: true
+response_headers:
+  documented: []
+  observed: []
+  note: >-
+    No rate-limit response headers are documented. Unauthenticated probes of
+    https://app.tryflint.com/api/v1/agent/tasks cannot be used to observe them
+    without a key, so `observed` is empty rather than absent.
+documented_request_constraints:
+  - constraint: items array on a generate_pages task
+    value: 1-10 items per task
+    source: https://www.flint.com/docs/api
+    note: A hard per-request payload cap, distinct from a rate limit.
+  - constraint: callbackUrl
+    value: must be an HTTPS URL
+    source: https://www.flint.com/docs/api
+concurrency:
+  documented: false
+  observed_guidance: >-
+    Flint's own agent skill (github.com/tryflint/claude-code-plugin
+    skills/edit-site/SKILL.md) tells clients to wait 90-120 seconds between
+    status checks, states a single agent typically finishes in 4-5 minutes, and
+    warns that ~10 concurrent agents may take ~15 minutes. This is polling and
+    concurrency guidance published by Flint, not a rate limit, but it is the
+    only quantitative pacing advice the provider gives.
+    source: https://github.com/tryflint/claude-code-plugin/blob/main/skills/edit-site/SKILL.md
+economic_limit:
+  model: credits
+  detail: >-
+    The binding quota on Flint's API is economic, not temporal: Free = 160
+    credits/month, Starter = 12,000 credits/year, and page generation costs
+    ~60-250 credits per page. See plans/flint-plans-pricing.yml.
+cross_links:
+  plans: plans/flint-plans-pricing.yml
+  conventions: conventions/flint-conventions.yml
+  errors: errors/flint-problem-types.yml

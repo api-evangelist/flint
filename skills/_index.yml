@@ -1,12 +1,30 @@
-generated: '2026-07-19'
-method: generated
-source: openapi/flint-agent-tasks-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://github.com/tryflint/claude-code-plugin (provider-published skill) +
+  openapi/flint-agent-tasks-api-openapi.yml (generated skills)
 skills:
+  - file: flint-edit-site.md
+    name: edit-site
+    provenance: provider-published
+    method: searched
+    source: https://github.com/tryflint/claude-code-plugin/blob/main/skills/edit-site/SKILL.md
+    api: mcp/flint-mcp.yml
+    tools: [list_sites, run_background_agent, check_background_agent_status, publish_site]
+    note: >-
+      Saved VERBATIM from Flint's own Claude Code plugin. This is Flint's
+      published agent skill, shipped in github.com/tryflint/claude-code-plugin
+      and installed with `/plugin install flint`. It targets the MCP tools, not
+      the REST operations. Do not edit — re-harvest to update.
   - file: flint-generate-landing-pages.md
     name: Generate on-brand landing pages from a template
-    api: openapi/flint-agent-tasks-openapi.yml
+    provenance: api-evangelist
+    method: generated
+    api: openapi/flint-agent-tasks-api-openapi.yml
     operations: [createAgentTask, getAgentTask]
   - file: flint-prompt-edit-site.md
     name: Modify a Flint site with a prompt agent
-    api: openapi/flint-agent-tasks-openapi.yml
+    provenance: api-evangelist
+    method: generated
+    api: openapi/flint-agent-tasks-api-openapi.yml
     operations: [createAgentTask, getAgentTask]

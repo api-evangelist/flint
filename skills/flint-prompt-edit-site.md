@@ -1,7 +1,7 @@
 ---
 name: Modify a Flint site with a prompt agent
 description: Start a background AI agent that edits a Flint site from a free-form prompt, then poll the task to completion and optionally publish.
-api: openapi/flint-agent-tasks-openapi.yml
+api: openapi/flint-agent-tasks-api-openapi.yml
 operations: [createAgentTask, getAgentTask]
 ---
 

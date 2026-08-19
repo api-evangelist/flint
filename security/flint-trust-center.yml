@@ -1,20 +1,67 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 probe: true
 url: https://www.flint.com/security
+sources:
+- https://www.flint.com/security
+- https://www.flint.com/docs/data-residency-gdpr
+- https://www.flint.com/docs/slas
 certifications:
 - name: SOC 2 Type II
   status: preparing
+  achieved: false
   scope: >-
     Audited controls for security, availability, and confidentiality trust
     service principles. Listed as "Preparing" on the security page — not yet an
-    achieved certification.
+    achieved certification. No auditor, report date or report request path is
+    published.
+compliance_programs:
+- name: GDPR
+  status: published
+  url: https://www.flint.com/docs/data-residency-gdpr
+  detail: >-
+    Flint publishes a Data Residency & GDPR Compliance page describing what it
+    processes and how to configure a compliant deployment: it stores page
+    content (HTML/CSS/images) but not visitor data by default; visitor
+    interactions are handled by the customer's own analytics/CRM/form tools
+    under their policies; Flint-side data collection can be disabled entirely on
+    request; and the recommended GDPR posture is reverse-proxy (subfolder)
+    hosting so cookies stay first-party under the customer's own CMP.
+- name: Data Processing Agreement (DPA)
+  status: available-on-request
+  contact: privacy@tryflint.com
+- name: Regulated-industry review
+  status: available-on-request
+  contact: support@tryflint.com
+  detail: >-
+    Flint offers to walk compliance teams through data flows, subprocessors and
+    infrastructure certifications for healthcare, finance and other regulated
+    sectors — on request, not published.
+data_residency:
+  hosting: Vercel global edge network
+  edge: Assets served from the edge location closest to the visitor.
+  origin: United States
+  eu_residency_option: not published
+  source: https://www.flint.com/docs/data-residency-gdpr
+availability_commitments:
+  sla_url: https://www.flint.com/docs/slas
+  uptime_target: 99.9%
+  status_page: https://www.flint.com/status
+  detail: See lifecycle/flint-lifecycle.yml for the full SLA breakdown.
 security_contact: security@tryflint.com
+privacy_contact: privacy@tryflint.com
+trust_portal:
+  published: false
+  note: No Vanta/Drata/SafeBase-style trust portal URL is published.
 note: >-
-  Flint publishes a lightweight security page describing comprehensive controls
-  under monitoring and SOC 2 Type II preparation. No trust-portal (Vanta/Drata)
-  URL is published; there are no achieved third-party certifications yet, so no
-  Compliance pointer is emitted.
+  Flint has a published COMPLIANCE PROGRAM (GDPR/data residency + DPA on
+  request) but no ACHIEVED third-party certification — SOC 2 Type II is still in
+  preparation. The Compliance pointer in apis.yml therefore targets the
+  published GDPR/data-residency page, not a certification claim.
 evidence:
 - source: https://www.flint.com/security
   keywords: [soc 2 type ii, security controls, availability, confidentiality]
+- source: https://www.flint.com/docs/data-residency-gdpr
+  keywords: [gdpr, data residency, dpa, subprocessors, cmp, first-party cookies]
+- source: https://www.flint.com/docs/slas
+  keywords: [uptime, sev1, sev2, service level credits]

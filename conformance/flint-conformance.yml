@@ -1,6 +1,10 @@
-generated: '2026-07-19'
-method: derived
-source: openapi/flint-agent-tasks-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://www.flint.com/docs/api, https://www.flint.com/docs/slas,
+  https://www.flint.com/docs/data-residency-gdpr,
+  https://mcp.tryflint.com/.well-known/oauth-protected-resource, and
+  openapi/flint-agent-tasks-api-openapi.yml
 standards:
   - id: oauth2
     conforms: true
@@ -13,19 +17,73 @@ standards:
     evidence: code_challenge_methods_supported includes S256.
   - id: rfc9728-oauth-protected-resource
     conforms: true
-    evidence: /.well-known/oauth-protected-resource served at mcp.tryflint.com.
+    evidence: /.well-known/oauth-protected-resource served at mcp.tryflint.com (HTTP 200, re-probed 2026-08-13).
   - id: rfc9116-security-txt
     conforms: true
     evidence: /.well-known/security.txt served at www.flint.com.
   - id: mcp
     conforms: true
-    evidence: Official hosted MCP server at https://mcp.tryflint.com/mcp (HTTP/SSE).
+    evidence: Official hosted MCP server at https://mcp.tryflint.com/mcp (HTTP transport, four tools documented at /docs/claude-code-mcp).
   - id: webhooks
     conforms: true
     evidence: Per-task completion callback (callbackUrl, HTTPS POST).
   - id: rfc9457-problem-details
     conforms: false
-    evidence: REST API returns plain HTTP status codes, not application/problem+json.
+    evidence: 'REST API returns plain HTTP status codes with a bare {"error": "..."} string body, not application/problem+json.'
   - id: bearer-token-auth
     conforms: true
-    evidence: REST API uses Authorization Bearer API key.
+    evidence: REST API uses Authorization Bearer API key (ak_ prefix).
+  - id: gdpr
+    conforms: true
+    evidence: >-
+      Flint publishes a Data Residency & GDPR Compliance page
+      (https://www.flint.com/docs/data-residency-gdpr) stating it stores page
+      content but no visitor data by default, offers to disable all Flint-side
+      data collection on request, documents a reverse-proxy/first-party-cookie
+      GDPR configuration, and makes a Data Processing Agreement available via
+      privacy@tryflint.com.
+  - id: soc2-type-ii
+    conforms: false
+    evidence: >-
+      https://www.flint.com/security lists SOC 2 Type II as "Preparing" — an
+      in-progress program, not an achieved certification. No auditor, report
+      date or trust portal is published.
+  - id: sla-published
+    conforms: true
+    evidence: >-
+      https://www.flint.com/docs/slas publishes 99.9% uptime, p95 page load
+      <=3s, Sev1/Sev2 response and resolution targets, and capped service-level
+      credits (10% of monthly fees).
+  - id: status-page
+    conforms: true
+    evidence: >-
+      Atlassian Statuspage at https://www.flint.com/status ->
+      https://flint1.statuspage.io with API, Page Builder and Hosting
+      components, an api/v2 JSON feed and atom/rss history.
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: No deprecation policy and no Sunset/Deprecation header contract published.
+  - id: semver
+    conforms: partial
+    evidence: >-
+      The first-party Claude Code plugin declares SemVer and Keep a Changelog
+      1.1.0; the API itself is versioned only by URI path (v1) with no
+      changelog. Version 1.1.0 of the plugin is undocumented in its own
+      CHANGELOG.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      Flint publishes no OpenAPI document. Probes of /openapi.json,
+      /swagger.json, /api-docs and /api/openapi.json on app.tryflint.com return
+      the Next.js SPA HTML shell (soft-200); www.flint.com returns 404. The
+      spec in openapi/ is an API Evangelist derivation from the published
+      reference at /docs/api.
+  - id: a2a-agent-card
+    conforms: false
+    evidence: >-
+      No A2A Agent Card. /.well-known/agent-card.json and /.well-known/agent.json
+      return 404 on www.flint.com, tryflint.com and mcp.tryflint.com; the 200s
+      on app.tryflint.com are the SPA catch-all serving HTML, not a card.
+  - id: llms-txt
+    conforms: false
+    evidence: /llms.txt returns 404 on www.flint.com and /docs; the file in llms/ is API Evangelist generated.

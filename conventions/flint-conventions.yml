@@ -1,10 +1,13 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 source: https://www.flint.com/docs/api
 docs: https://www.flint.com/docs/api
 authentication:
   rest: "Bearer API key (Authorization: Bearer ak_...) — see authentication/flint-authentication.yml"
   mcp: "OAuth 2.0 via Clerk — see authentication/flint-authentication.yml"
+  key_provisioning: >-
+    Created in Flint team settings; scoped to the organization; requires at
+    least `member` role permissions.
 async_execution:
   model: >-
     Agent tasks are asynchronous. createAgentTask returns a taskId with
@@ -12,34 +15,84 @@ async_execution:
     callbackUrl to be notified on completion.
   states: [running, completed, failed]
   identifier: taskId
+  identifier_format: "bg-<site-uuid>-<suffix>"
+  mcp_identifier_alias: >-
+    The MCP tools call the same identifier `workflowId` (run_background_agent
+    returns a "workflow ID"; check_background_agent_status takes `workflowId`).
+    Same value, different name across the two surfaces.
+  polling_guidance:
+    interval: 90-120 seconds between status checks
+    typical_duration: 4-5 minutes for a single agent
+    concurrency_note: ~10 concurrent agents may take ~15 minutes
+    source: https://github.com/tryflint/claude-code-plugin/blob/main/skills/edit-site/SKILL.md
+publish_semantics:
+  field: publish (boolean, default false)
+  false: >-
+    No production deployment. Changes land on the site's staging branch and
+    preview URLs remain accessible.
+  true: >-
+    Generated pages become immediately visible on the live site and a
+    production deployment is triggered.
+  standalone_publish: MCP publish_site tool only — no REST equivalent.
+  detail: See sandbox/flint-sandbox.yml
 idempotency:
   supported: false
   note: >-
     Flint's Agent Tasks API does not document an idempotency-key header or
-    parameter. Each POST /agent/tasks starts a new background task.
+    parameter. Each POST /agent/tasks starts a new background task, and each
+    task consumes credits — so a blind retry on a network timeout both
+    duplicates work and double-charges. Poll before retrying.
 pagination:
   supported: false
   note: No list endpoints with pagination are documented in the REST API.
+field_expansion:
+  supported: false
+metadata:
+  supported: false
+request_tracing:
+  request_id_header: not documented
+payload_limits:
+  - operation: createAgentTask (generate_pages)
+    field: items
+    limit: 1-10 items per task
+  - operation: createAgentTask
+    field: callbackUrl
+    constraint: must be HTTPS
 webhooks:
   supported: true
   mechanism: callbackUrl
   transport: HTTPS POST
   trigger: task completion
+  subscription: per-request, not per-account
+  signing: not documented
+  retries: not documented
   payload_fields: [taskId, status, pages, error, timestamp]
   detail: See asyncapi/flint-webhooks.yml
 rate_limiting:
   supported: true
   signal: HTTP 429 Too Many Requests
-  note: Rate limits exist; exceeding them returns 429. Specific limits are not published.
+  headers: not documented
+  limits_published: false
+  note: >-
+    Flint states the endpoints are rate limited and that exceeding the limit
+    returns 429, but publishes no numbers, windows, scopes or response headers.
+    See rate-limits/flint-rate-limits.yml. The binding quota in practice is
+    economic (credits), not temporal.
 versioning:
   scheme: uri-path
   current: v1
   base_url: https://app.tryflint.com/api/v1
+  changelog: none published for the API — see changelog/flint-changelog.yml
 error_handling:
-  rest: Plain HTTP status codes (400/404/429/500) — see errors/flint-problem-types.yml
+  rest: >-
+    Plain HTTP status codes with a bare {"error": "<message>"} JSON body — not
+    RFC 9457 application/problem+json. See errors/flint-problem-types.yml.
   async: Failed tasks return an errorMessage string on the task-status response.
 cross_links:
   errors: errors/flint-problem-types.yml
   lifecycle: lifecycle/flint-lifecycle.yml
   authentication: authentication/flint-authentication.yml
   webhooks: asyncapi/flint-webhooks.yml
+  rate_limits: rate-limits/flint-rate-limits.yml
+  plans: plans/flint-plans-pricing.yml
+  sandbox: sandbox/flint-sandbox.yml

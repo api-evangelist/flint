@@ -1,34 +1,88 @@
-generated: '2026-07-19'
-method: derived
-source: openapi/flint-agent-tasks-openapi.yml
+generated: '2026-08-13'
+method: searched
+source: https://www.flint.com/docs/api
 docs: https://www.flint.com/docs/api
 format: http-status
+envelope_shape: '{"error": "<human-readable message>"}'
 note: >-
-  Flint's Agent Tasks API documents plain HTTP status codes (not RFC 9457
-  application/problem+json). Failed asynchronous tasks surface an `errorMessage`
-  string on the task-status response envelope rather than an HTTP error.
+  Flint's Agent Tasks API documents plain HTTP status codes with a single-key
+  JSON body, not RFC 9457 application/problem+json. There is no machine-readable
+  error CODE — only an English `error` string — so clients must branch on the
+  HTTP status, and the exact published strings below are the only stable
+  discriminator within a status. Failed asynchronous tasks surface an
+  `errorMessage` string on the task-status response envelope rather than an
+  HTTP error, so a 200 can still mean the work failed.
 envelope:
+  sync_failure_field: error
   async_failure_field: errorMessage
-  async_failure_operation: openapi/flint-agent-tasks-openapi.yml#getAgentTask
+  async_failure_operation: openapi/flint-agent-tasks-api-openapi.yml#getAgentTask
+  async_gotcha: >-
+    getAgentTask returns HTTP 200 with status "failed" and an errorMessage when
+    the agent run fails. Never treat 2xx as success without reading `status`.
 problems:
   - status: 400
+    error: Site is missing repository information
+    title: Site not provisioned for agent tasks
+    remediation: >-
+      The target site has no backing repository. Open the site in the Flint app
+      and complete setup, or pick a different siteId.
+    source_operations:
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: true
+  - status: 400
+    error: Invalid callback URL
+    title: Callback URL rejected
+    remediation: Supply an absolute HTTPS URL for callbackUrl; HTTP and relative URLs are rejected.
+    source_operations:
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: true
+  - status: 400
+    error: null
     title: Invalid input or missing configuration
-    remediation: Check required fields (siteId, prompt or command/templatePageSlug/items) and the request body shape.
+    remediation: >-
+      Check required fields — siteId plus either prompt, or
+      command=generate_pages with templatePageSlug and items (1-10).
     source_operations:
-      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: false
   - status: 404
-    title: Site or task not found
-    remediation: Verify the siteId or taskId belongs to your account.
+    error: Site not found
+    title: Site not found
+    remediation: Verify the siteId is a UUID belonging to an organization your API key can access.
     source_operations:
-      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
-      - openapi/flint-agent-tasks-openapi.yml#getAgentTask
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: true
+  - status: 404
+    error: Task not found
+    title: Task not found
+    remediation: Verify the taskId returned by createAgentTask; task IDs are scoped to your organization.
+    source_operations:
+      - openapi/flint-agent-tasks-api-openapi.yml#getAgentTask
+    documented_verbatim: true
   - status: 429
+    error: null
     title: Too Many Requests
-    remediation: Rate limit exceeded; back off and retry.
+    remediation: >-
+      Rate limit exceeded; back off and retry. No Retry-After header or limit
+      values are documented — see rate-limits/flint-rate-limits.yml.
     source_operations:
-      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: false
   - status: 500
-    title: Server error
-    remediation: Retry later; contact support@tryflint.com if it persists.
+    error: Failed to start task
+    title: Task could not be started
+    remediation: >-
+      Retry later. Because there is no idempotency key, poll before retrying a
+      create so you do not start (and pay credits for) a duplicate task.
+      Contact support@tryflint.com if it persists.
     source_operations:
-      - openapi/flint-agent-tasks-openapi.yml#createAgentTask
+      - openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+    documented_verbatim: true
+async_failures:
+  - errorMessage: Failed to generate page content
+    documented_verbatim: true
+    source: https://www.flint.com/docs/api
+    note: Example of a terminal task failure returned on a 200 task-status response.
+cross_links:
+  conventions: conventions/flint-conventions.yml
+  rate_limits: rate-limits/flint-rate-limits.yml

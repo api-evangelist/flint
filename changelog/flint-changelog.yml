@@ -1,0 +1,42 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/tryflint/claude-code-plugin/blob/main/CHANGELOG.md
+note: >-
+  Flint publishes NO changelog for the Agent Tasks API or the hosted MCP server.
+  There is no /changelog, /docs/changelog, release-notes page or dated
+  "what's new" surface anywhere on flint.com (both paths return 404), and the
+  API reference at /docs/api carries no version history. The only dated,
+  machine-readable change record Flint publishes is the CHANGELOG.md in its
+  first-party Claude Code plugin repository, recorded below. Scope it
+  accordingly: it tracks the plugin, not the API.
+scope: claude-code-plugin
+scheme: semver
+format: keep-a-changelog-1.1.0
+current_version: '1.1.0'
+current_version_source: >-
+  .claude-plugin/plugin.json (main). NOT present in CHANGELOG.md — the 1.1.0
+  release is undocumented, which is itself the finding.
+entries:
+  - version: '1.1.0'
+    date: null
+    breaking: []
+    additions: []
+    highlights:
+      - Version declared in plugin.json but absent from CHANGELOG.md; contents undocumented.
+  - version: '1.0.0'
+    date: '2026-03-24'
+    breaking: []
+    additions:
+      - Initial release of the Flint plugin for Claude Code
+      - "`edit-site` skill for modifying Flint websites via background AI agents"
+      - MCP server integration with OAuth authentication
+      - Site listing, background agent execution, and publishing capabilities
+    highlights:
+      - First public packaged agent surface for Flint.
+api_changelog:
+  published: false
+  probed:
+    - url: https://www.flint.com/changelog
+      status: 404
+    - url: https://www.flint.com/docs/changelog
+      status: 404

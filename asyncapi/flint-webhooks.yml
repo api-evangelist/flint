@@ -14,7 +14,7 @@ delivery:
 events:
   - name: task.completed
     trigger: A background agent task finishes (success or failure).
-    source_operation: openapi/flint-agent-tasks-openapi.yml#createAgentTask
+    source_operation: openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
     payload_fields:
       - taskId
       - status        # completed | failed

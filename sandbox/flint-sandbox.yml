@@ -1,0 +1,48 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.flint.com/docs/api
+docs: https://www.flint.com/docs/api
+sandbox_published: false
+test_mode: false
+note: >-
+  Flint publishes NO sandbox and NO test mode. There are no test-vs-live key
+  prefixes (a single `ak_` API key prefix is documented for all keys), no test
+  fixtures, no trigger/simulation tooling and no time controls. Every API call
+  operates on a real Flint site and consumes real credits. What Flint does
+  publish is a PREVIEW vs PUBLISH separation, recorded below — it is the only
+  non-production path the API offers, and it is a deployment gate, not a
+  sandbox: work is real, billed, and lives on a staging branch of the real site.
+key_prefixes:
+  live: "ak_"
+  test: null
+preview_mode:
+  mechanism: "publish boolean on createAgentTask"
+  default: false
+  behavior_when_false: >-
+    No production deployment is triggered, but preview URLs remain accessible —
+    changes land on the site's staging branch.
+  behavior_when_true: >-
+    Generated pages become immediately visible on the live site and a production
+    deployment is triggered.
+  promote_to_production:
+    rest: "re-run createAgentTask with publish set to true"
+    mcp: publish_site tool (resolves the latest staging changes and deploys)
+  urls_returned:
+    - field: previewUrl
+      description: Staging URL for the generated page (e.g. a *.vercel.app preview host).
+    - field: editUrl
+      description: Deep link into the Flint editor for that page.
+    - field: publishedUrl
+      description: Production URL on the customer domain, present once published.
+  source: https://www.flint.com/docs/api
+free_tier_as_evaluation:
+  detail: >-
+    The closest thing to a no-risk trial surface is the Free plan (160 credits
+    per month, "For exploring and testing Flint", API and MCP-driven page
+    creation included) and a 14-day Starter trial with no credit card. Both
+    operate against production.
+  source: https://www.flint.com/pricing
+cross_links:
+  plans: plans/flint-plans-pricing.yml
+  authentication: authentication/flint-authentication.yml
+  conventions: conventions/flint-conventions.yml

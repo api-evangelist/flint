@@ -1,0 +1,128 @@
+generated: '2026-08-13'
+method: searched
+source: https://www.flint.com/pricing
+docs: https://www.flint.com/docs/guides/credits-and-billing
+note: >-
+  Flint prices on a CREDIT unit, not on API calls. Credits are consumed by page
+  builds, edits, image generation and Google Ads Agent recommendation runs; API
+  and MCP-driven page creation draw from the same credit pool as the UI, so the
+  API has no separate meter or price list. Published credit ranges per task are
+  captured under `credit_costs` below — Flint states they are estimates from
+  real usage, not fixed pricing.
+currency: USD
+unit: credit
+plan_count: 3
+plans:
+  - name: Free
+    price: 0
+    billing_period: month
+    audience: For exploring and testing Flint
+    included_quota: 160 credits per month
+    quota_period: month
+    limits:
+      bandwidth: Limited
+      design_system_import: one-time, from your website
+      hosting: included
+      api_and_mcp_page_creation: included
+      flint_badge: present
+    cta: Get started free
+  - name: Starter
+    price: 96
+    billing_period: month
+    annual_note: Save $288/year on annual billing
+    audience: For teams ready to move fast
+    included_quota: 12,000 credits per year
+    quota_period: year
+    limits:
+      bandwidth: 10GB
+      domain: Custom domain or subdomain
+      support: Email support
+      flint_badge: removable
+      hosting: included
+    trial: 14-day free trial, no credit card required
+    cta: Start free trial
+  - name: Custom
+    price: null
+    price_note: "Let's Talk — contact sales"
+    billing_period: null
+    audience: For teams that need more control
+    included_quota: Custom credits and traffic
+    limits:
+      bandwidth: custom
+      root_domain_publishing: true
+      multiple_websites: true
+      design_system_sync: ongoing
+      password_protection: true
+      sso_saml: true
+      rbac: true
+      readonly_codebase_access: true
+      custom_analytics_integrations: true
+      csv_bulk_upload_and_api_access: true
+      dedicated_slack_channel: true
+      custom_onboarding_and_support: true
+      google_ads_agent: full capabilities
+      multiple_google_ads_accounts: true
+      multiple_domains: true
+    cta: Talk to sales
+add_ons:
+  - name: Credit reload bundle
+    price: 65
+    currency: USD
+    unit: 500 credits per bundle
+    availability: paid plans only
+    validity: 12 months from date of purchase
+    quantity: unlimited bundles
+  - name: Managed Services
+    price: null
+    price_note: Enterprise only — contact sales
+    includes:
+      - Campaign strategy and planning
+      - Page creation and deployment
+      - Audience and personalization strategy
+      - Experiment design and campaign QA
+      - Performance reporting
+      - Ongoing optimization
+      - Priority turnaround options
+      - Dedicated campaign lead
+credit_costs:
+  disclaimer: >-
+    Published as estimated ranges from real usage, not fixed pricing
+    (Flint's own wording on the pricing page).
+  items:
+    - task: Quick edit (reword, restyle, or fix in one message)
+      credits: ~2-10
+    - task: Images (generate, swap, or place)
+      credits: ~1-6
+    - task: Page duplication
+      credits: ~0-5
+    - task: Components & sections (multi-prompt adjustment or full rework)
+      credits: ~20-60
+    - task: Simple page (mostly static, a few sections)
+      credits: ~60-130
+    - task: Average page (form + 1-2 interactive components)
+      credits: ~105-195
+    - task: Complex page (more than 2 complex components)
+      credits: ~135-250
+    - task: Comparison page (research + matrix, typical 5 competitors)
+      credits: ~80-140
+    - task: ABM microsite (~20 variants, researched)
+      credits: ~85-115
+    - task: Google Ads Agent — a run of recommendations
+      credits: ~100-250
+    - task: Google Ads Agent — refine a recommendation in chat
+      credits: 0 (free)
+    - task: Google Ads Agent — implement a recommendation to Google Ads
+      credits: 0 (free)
+api_metering:
+  separate_api_pricing: false
+  detail: >-
+    "API and MCP-driven page creation" is listed as a Free-plan feature and is
+    metered in credits like any other page operation. Enterprise adds
+    "CSV bulk upload and API access" as a named tier capability. No per-request
+    price, no API-specific quota and no overage rate are published.
+plan_changes:
+  upgrade: prorated for the remainder of the billing cycle
+  downgrade: takes effect at the start of the next billing cycle
+  exhaustion: >-
+    Buy credit reload bundles on demand (paid plans), upgrade a tier, or switch
+    to annual billing for a larger credit pool.

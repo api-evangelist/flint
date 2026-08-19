@@ -1,0 +1,58 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Flint Agent Tasks API",
+    "version": "v1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agent Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an agent task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.tryflint.com/api/v1/agent/tasks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start a background AI agent on a Flint site. Two task types are supported: a free-form `prompt` task that instructs the agent to modify the site, and a `generate_pages` task that creates multiple pages from a template page and a list of items. Returns a taskId to poll or a callbackUrl is invoked on completion."
+        },
+        {
+          "info": {
+            "name": "Get task status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.tryflint.com/api/v1/agent/tasks/:taskId",
+            "params": [
+              {
+                "name": "taskId",
+                "value": "",
+                "type": "path",
+                "description": "The task identifier returned by createAgentTask."
+              }
+            ]
+          },
+          "docs": "Retrieve the status of a previously created agent task. While running, returns status only. On completion, returns an output object listing the pages created, modified, and deleted. On failure, returns an errorMessage."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

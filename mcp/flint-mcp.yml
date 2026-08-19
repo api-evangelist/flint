@@ -1,15 +1,21 @@
-generated: '2026-07-19'
+generated: '2026-08-13'
 method: searched
 status: published
-source: https://www.flint.com/docs/claude-mcp
+source: https://www.flint.com/docs/claude-code-mcp
+also_documented:
+  - https://www.flint.com/docs/claude-mcp
+  - https://www.flint.com/docs/claude-code-plugin
+  - https://www.flint.com/product/flint-mcp
 server:
   name: flint
   transport: http
   url: https://mcp.tryflint.com/mcp
   description: >-
-    Flint's official hosted remote MCP server (HTTP/SSE). Add it as a custom
-    connector in Claude (claude.ai/settings/connectors) or any MCP-compatible
-    client; sign in to your Flint account to authorize.
+    Flint's official hosted remote MCP server (HTTP). Add it as a custom
+    connector in Claude (claude.ai/settings/connectors), with
+    `claude mcp add flint --transport http https://mcp.tryflint.com/mcp` in
+    Claude Code, or via the first-party Claude Code plugin
+    (`/plugin install flint`); sign in to your Flint account to authorize.
 authorization:
   type: oauth2
   protected_resource: https://mcp.tryflint.com
@@ -17,23 +23,94 @@ authorization:
   authorization_endpoint: https://clerk.tryflint.com/oauth/authorize
   token_endpoint: https://clerk.tryflint.com/oauth/token
   registration_endpoint: https://clerk.tryflint.com/oauth/register
-  grant_types: [authorization_code, refresh_token]
-  code_challenge_methods: [S256]
-  scopes_advertised: [openid, offline_access]
+  grant_types:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods:
+  - S256
+  scopes_advertised:
+  - openid
+  - offline_access
   source: https://mcp.tryflint.com/.well-known/oauth-protected-resource
+tools_source: >-
+  https://www.flint.com/docs/claude-code-mcp — Flint's published tool and
+  parameter reference. The live server's tools/list is OAuth-gated (anonymous
+  POST returns HTTP 401 invalid_token, re-probed 2026-08-13), so parameter
+  NAMES and TYPES below are from the provider's docs; exact JSON Schema shapes
+  still require an authenticated introspection.
 tools:
-  - name: run_background_agent
-    description: >-
-      Start a background AI agent on a Flint site. The agent executes a prompt
-      to modify your website.
-    source_operation: openapi/flint-agent-tasks-openapi.yml#createAgentTask
-  - name: check_background_agent_status
-    description: Check the status of a previously started background agent.
-    source_operation: openapi/flint-agent-tasks-openapi.yml#getAgentTask
-  - name: list_sites
-    description: Lists all Flint sites accessible to your account.
-  - name: publish_site
-    description: Deploys a Flint site to production.
+- name: run_background_agent
+  description: Start a background AI agent on a Flint site. The agent executes a prompt to modify your
+    website.
+  parameters:
+  - name: siteId
+    type: string (UUID)
+    required: true
+    description: The UUID of the Flint site to modify.
+  - name: prompt
+    type: string
+    required: true
+    description: What the background agent should do.
+  returns: A workflow ID that can be used to check status.
+  source_operation: openapi/flint-agent-tasks-api-openapi.yml#createAgentTask
+- name: check_background_agent_status
+  description: Check the status of a previously started background agent.
+  parameters:
+  - name: workflowId
+    type: string
+    required: true
+    description: The ID returned from run_background_agent.
+  returns: The current status, phase, and output when completed.
+  source_operation: openapi/flint-agent-tasks-api-openapi.yml#getAgentTask
+- name: list_sites
+  description: Lists all Flint sites accessible to your account.
+  parameters: []
+  returns: A list of sites with name, site ID, organization ID, and organization name.
+  source_operation: null
+  note: No public REST equivalent — this is the only documented way to discover a siteId over an API.
+- name: publish_site
+  description: Deploys a Flint site to production.
+  parameters:
+  - name: siteId
+    type: string (UUID)
+    required: true
+    description: The target site to publish.
+  returns: Resolves the latest changes on the staging branch and triggers a production deployment.
+  source_operation: null
+  note: >-
+    No standalone REST publish operation; the nearest REST equivalent is the
+    `publish: true` flag on createAgentTask.
 clients_documented:
-  - Claude (claude.ai custom connector)
-  - Claude Code
+- Claude (claude.ai custom connector)
+- Claude Code (claude mcp add / plugin)
+- Claude Cowork
+config_scopes:
+  documented: [local, user, project]
+  source: https://www.flint.com/docs/claude-code-mcp
+packaged_distribution:
+  name: flint
+  kind: claude-code-plugin
+  install: "/plugin install flint"
+  repository: https://github.com/tryflint/claude-code-plugin
+  version: 1.1.0
+  license: MIT
+  mcp_config: '{"mcpServers":{"flint":{"type":"http","url":"https://mcp.tryflint.com/mcp"}}}'
+  bundles_skill: skills/flint-edit-site.md
+  note: >-
+    The plugin is a CONFIG + SKILL bundle, not a local server. It points Claude
+    Code at the same hosted HTTPS endpoint, so deployment mode stays `remote` —
+    there is no stdio process to install and run.
+deployment:
+  mode: remote
+  endpoint: https://mcp.tryflint.com/mcp
+  install: null
+  package: https://github.com/tryflint/claude-code-plugin
+  auth: oauth
+  verified: probed
+  probe: gated
+  probe_detail: >-
+    POST tools/list with Accept: application/json, text/event-stream returned
+    HTTP 401 {"error":"invalid_token","error_description":"No authorization
+    provided"} — the endpoint is live and enforcing OAuth.
+  checked: '2026-08-13'
+crosswalk: mcp/flint-tool-crosswalk.yml

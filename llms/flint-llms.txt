@@ -1,32 +1,65 @@
 # Flint
 
-> Flint is an AI web platform for marketing teams that generates on-brand,
-> high-converting landing pages and runs autonomous agents (including a Google
-> Ad agent) to maintain ad accounts. Its Agent Tasks REST API and hosted MCP
-> server let you create and modify pages programmatically from Claude, Clay,
-> Relay.app, or any HTTP client.
+> Flint (Flint Technologies, Inc.) is an AI web platform for marketing teams
+> that generates on-brand, high-converting landing pages and runs autonomous
+> agents (including a Google Ad agent) to maintain ad accounts. Its Agent Tasks
+> REST API and hosted MCP server let you create and modify pages
+> programmatically from Claude, Claude Code, Clay, Relay.app, or any HTTP client.
+> Work is metered in credits, not API calls.
 
 ## APIs
-- [Agent Tasks API reference](https://www.flint.com/docs/api): REST API to start background agent tasks (prompt or generate_pages) and poll status. Base URL https://app.tryflint.com/api/v1.
+- [Agent Tasks API reference](https://www.flint.com/docs/api): REST API to start background agent tasks (prompt or generate_pages) and poll status. Base URL https://app.tryflint.com/api/v1. Bearer API key (`ak_`). Two operations: createAgentTask, getAgentTask.
 - [Flint MCP + API guide](https://www.flint.com/docs/guides/flint-mcp-api): overview of programmatic page generation.
-- [Claude MCP integration](https://www.flint.com/docs/claude-mcp): hosted MCP server at https://mcp.tryflint.com/mcp (tools: run_background_agent, check_background_agent_status, list_sites, publish_site).
+- [Claude MCP integration](https://www.flint.com/docs/claude-mcp): hosted MCP server at https://mcp.tryflint.com/mcp as a claude.ai custom connector.
+- [Claude Code MCP integration](https://www.flint.com/docs/claude-code-mcp): `claude mcp add flint --transport http https://mcp.tryflint.com/mcp`. Four tools: run_background_agent, check_background_agent_status, list_sites, publish_site.
+- [Flint plugin for Claude Code](https://www.flint.com/docs/claude-code-plugin): `/plugin install flint` — bundles the MCP server, OAuth, and an `edit-site` skill. Source: https://github.com/tryflint/claude-code-plugin (MIT).
+
+## Operating notes for agents
+- Tasks are asynchronous. `createAgentTask` returns a `taskId` (MCP calls the same value `workflowId`) with status `running`; poll `getAgentTask` or supply an HTTPS `callbackUrl`.
+- `getAgentTask` returns HTTP 200 with `status: "failed"` and an `errorMessage` when a run fails — a 2xx does not mean success.
+- Poll every 90-120 seconds; a single agent typically finishes in 4-5 minutes.
+- There is no idempotency key and each task consumes credits — poll before retrying a create.
+- `generate_pages` accepts 1-10 items per task, each with `targetPageSlug` and `context`.
+- `publish: false` (default) keeps changes on staging with preview URLs; `publish: true` deploys to production.
+- Endpoints are rate limited (429 on exhaustion). No limits, windows or rate-limit headers are published.
+- Site discovery is MCP-only (`list_sites`); no public REST operation lists sites.
+
+## Reliability
+- [Status page](https://www.flint.com/status) — Atlassian Statuspage (https://flint1.statuspage.io); components: API, Page Builder, Hosting.
+- [Service Level Agreements](https://www.flint.com/docs/slas) — 99.9% uptime, p95 page load <=3s, Sev1 response <1h/resolution <12h, Sev2 <4h/<24h, service credits capped at 10% of monthly fees.
 
 ## Docs
 - [Documentation](https://www.flint.com/docs)
-- [Pricing](https://www.flint.com/pricing)
+- [Guides](https://www.flint.com/docs/guides)
+- [Pricing](https://www.flint.com/pricing) — Free (160 credits/mo), Starter ($96/mo, 12,000 credits/yr), Custom. Credit reloads: 500 for $65, valid 12 months.
 - [Blog](https://www.flint.com/blog)
 - [Customers](https://www.flint.com/customers)
+- [FAQ](https://www.flint.com/docs/faq)
 
-## Security
+## Security, privacy and compliance
 - [security.txt](https://www.flint.com/.well-known/security.txt)
-- [Vulnerability disclosure policy](https://www.flint.com/security/vdp)
-- [Security overview](https://www.flint.com/security)
+- [Vulnerability disclosure policy](https://www.flint.com/security/vdp) — 90-day disclosure window, safe harbor, security@tryflint.com
+- [Security overview](https://www.flint.com/security) — SOC 2 Type II in preparation
+- [Data Residency & GDPR Compliance](https://www.flint.com/docs/data-residency-gdpr) — Vercel edge hosting, US origin, no visitor data stored by default, DPA on request (privacy@tryflint.com)
 
 ## Legal
 - [Terms of Service](https://www.flint.com/terms-of-service)
 - [Privacy Policy](https://www.flint.com/privacy-policy)
 
+## Not published by Flint
+- No OpenAPI document (/openapi.json, /swagger.json, /api-docs all miss or return the SPA shell).
+- No llms.txt (this file is an API Evangelist generation).
+- No A2A Agent Card, no AsyncAPI, no API changelog, no deprecation/Sunset policy, no sandbox or test-mode keys, no client SDK on any package registry.
+
 ## Artifacts (API Evangelist enrichment)
-- OpenAPI: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/openapi/flint-agent-tasks-openapi.yml
+- OpenAPI: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/openapi/flint-agent-tasks-api-openapi.yml
 - MCP: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/mcp/flint-mcp.yml
+- MCP tool crosswalk: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/mcp/flint-tool-crosswalk.yml
 - Authentication: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/authentication/flint-authentication.yml
+- Conventions: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/conventions/flint-conventions.yml
+- Errors: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/errors/flint-problem-types.yml
+- Lifecycle + SLA: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/lifecycle/flint-lifecycle.yml
+- Plans and pricing: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/plans/flint-plans-pricing.yml
+- Rate limits: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/rate-limits/flint-rate-limits.yml
+- Packages: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/packages/flint-packages.yml
+- Webhooks: https://raw.githubusercontent.com/api-evangelist/flint/refs/heads/main/asyncapi/flint-webhooks.yml

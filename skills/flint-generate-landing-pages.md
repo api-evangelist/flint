@@ -1,7 +1,7 @@
 ---
 name: Generate on-brand landing pages from a template
 description: Use Flint's Agent Tasks API to generate many on-brand landing pages from a template page and a list of items, then poll for completion.
-api: openapi/flint-agent-tasks-openapi.yml
+api: openapi/flint-agent-tasks-api-openapi.yml
 operations: [createAgentTask, getAgentTask]
 ---
 

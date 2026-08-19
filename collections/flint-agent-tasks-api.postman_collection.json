@@ -1,0 +1,481 @@
+{
+  "item": [
+    {
+      "id": "b35afcd0-86bb-4fbf-83da-b47f3026c3c9",
+      "name": "Agent Tasks",
+      "description": {
+        "content": "Start and monitor background AI agent tasks on a Flint site.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b74f9e39-65cd-41a6-9922-8bc40ab86fac",
+          "name": "Create an agent task",
+          "request": {
+            "name": "Create an agent task",
+            "description": {
+              "content": "Start a background AI agent on a Flint site. Two task types are supported: a free-form `prompt` task that instructs the agent to modify the site, and a `generate_pages` task that creates multiple pages from a template page and a list of items. Returns a taskId to poll or a callbackUrl is invoked on completion.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "agent",
+                "tasks"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteId\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"<uri>\",\n  \"publish\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e83e13cc-9b2f-422b-9c11-3e9a7a909333",
+              "name": "Task accepted and running.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteId\": \"string\",\n  \"prompt\": \"string\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"http://uMQS.cqvhegzpIFFfHOyMM2IwG8FPl7yW8muzcNoTlrjbt\",\n  \"publish\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"taskId\": \"bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4\",\n  \"status\": \"running\",\n  \"createdAt\": \"1977-07-30T15:57:05.015Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ff63be53-236f-49b2-9a8c-0687d06b56f1",
+              "name": "Invalid input or missing configuration.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteId\": \"string\",\n  \"prompt\": \"string\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"http://uMQS.cqvhegzpIFFfHOyMM2IwG8FPl7yW8muzcNoTlrjbt\",\n  \"publish\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "80c9cd60-b331-4887-a152-a8e5f4db585b",
+              "name": "Site not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteId\": \"string\",\n  \"prompt\": \"string\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"http://uMQS.cqvhegzpIFFfHOyMM2IwG8FPl7yW8muzcNoTlrjbt\",\n  \"publish\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "83369993-9470-4636-97df-aa3cce03f4fc",
+              "name": "Too Many Requests — rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteId\": \"string\",\n  \"prompt\": \"string\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"http://uMQS.cqvhegzpIFFfHOyMM2IwG8FPl7yW8muzcNoTlrjbt\",\n  \"publish\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c98dc967-45ea-4244-8fab-4d7e3fba1c4b",
+              "name": "Server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"siteId\": \"string\",\n  \"prompt\": \"string\",\n  \"command\": \"prompt\",\n  \"callbackUrl\": \"http://uMQS.cqvhegzpIFFfHOyMM2IwG8FPl7yW8muzcNoTlrjbt\",\n  \"publish\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2057a891-1881-4362-9d20-3c95f2905016",
+          "name": "Get task status",
+          "request": {
+            "name": "Get task status",
+            "description": {
+              "content": "Retrieve the status of a previously created agent task. While running, returns status only. On completion, returns an output object listing the pages created, modified, and deleted. On failure, returns an errorMessage.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "agent",
+                "tasks",
+                ":taskId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "taskId",
+                  "description": "(Required) The task identifier returned by createAgentTask."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8b2a5f13-891b-48fa-baff-be3632fc0ec2",
+              "name": "Task status.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks",
+                    ":taskId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "taskId",
+                      "description": "(Required) The task identifier returned by createAgentTask."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"failed\",\n  \"output\": {\n    \"pagesCreated\": [\n      \"string\",\n      \"string\"\n    ],\n    \"pagesModified\": [\n      \"string\",\n      \"string\"\n    ],\n    \"pagesDeleted\": [\n      \"string\",\n      \"string\"\n    ]\n  },\n  \"errorMessage\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e158100c-4a20-48b2-add9-1139b26a75f2",
+              "name": "Task not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "agent",
+                    "tasks",
+                    ":taskId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "taskId",
+                      "description": "(Required) The task identifier returned by createAgentTask."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.tryflint.com/api/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "eeb7b002-fd9e-4cd8-81af-7e22bccc5eed",
+    "name": "Flint Agent Tasks API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Flint's Agent Tasks API lets you run background AI agents against a Flint site to modify pages from a free-form prompt, or generate multiple pages from a template. Tasks run asynchronously; poll the task or supply a callbackUrl webhook to receive completion. Landing pages are generated on-brand and can be optionally published.\n\nContact Support:\n Name: Flint Support\n Email: support@tryflint.com",
+      "type": "text/plain"
+    }
+  }
+}
