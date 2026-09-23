@@ -1,28 +1,47 @@
-generated: '2026-07-19'
+generated: '2026-09-19'
 method: searched
 source: https://www.flint.com/.well-known/security.txt
 hosts:
-  - host: https://www.flint.com
-    documents:
-      - path: /.well-known/security.txt   # RFC 9116
-        status: 200
-        file: flint-security.txt
-      - path: /.well-known/openid-configuration
-        status: 404
-      - path: /.well-known/oauth-authorization-server
-        status: 404
-      - path: /.well-known/api-catalog
-        status: 404
-      - path: /.well-known/ai-plugin.json
-        status: 404
-  - host: https://app.tryflint.com
-    note: >-
-      All /.well-known/* and /llms.txt paths return HTTP 200 but serve the SPA
-      HTML shell (soft-404), not real discovery documents. Not indexed.
-  - host: https://mcp.tryflint.com
-    documents:
-      - path: /.well-known/oauth-protected-resource   # RFC 9728
-        status: 200
-        file: flint-mcp-oauth-protected-resource.json
-      - path: /.well-known/security.txt
-        status: 404
+- host: https://www.flint.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: flint-security.txt
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://app.tryflint.com
+  note: All /.well-known/* and /llms.txt paths return HTTP 200 but serve the SPA HTML shell (soft-404),
+    not real discovery documents. Not indexed.
+- host: https://mcp.tryflint.com
+  documents:
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: flint-mcp-oauth-protected-resource.json
+  - path: /.well-known/security.txt
+    status: 404
+- host: https://clerk.tryflint.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: flint-clerk-oauth-authorization-server.json
+    bytes: 1224
+  path_echo_control: passed
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://clerk.tryflint.com
+    path: /.well-known/oauth-authorization-server
+    file: flint-clerk-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

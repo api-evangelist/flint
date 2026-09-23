@@ -3,19 +3,17 @@ method: searched
 status: published
 source: https://www.flint.com/docs/claude-code-mcp
 also_documented:
-  - https://www.flint.com/docs/claude-mcp
-  - https://www.flint.com/docs/claude-code-plugin
-  - https://www.flint.com/product/flint-mcp
+- https://www.flint.com/docs/claude-mcp
+- https://www.flint.com/docs/claude-code-plugin
+- https://www.flint.com/product/flint-mcp
 server:
   name: flint
   transport: http
   url: https://mcp.tryflint.com/mcp
-  description: >-
-    Flint's official hosted remote MCP server (HTTP). Add it as a custom
-    connector in Claude (claude.ai/settings/connectors), with
-    `claude mcp add flint --transport http https://mcp.tryflint.com/mcp` in
-    Claude Code, or via the first-party Claude Code plugin
-    (`/plugin install flint`); sign in to your Flint account to authorize.
+  description: Flint's official hosted remote MCP server (HTTP). Add it as a custom connector in Claude
+    (claude.ai/settings/connectors), with `claude mcp add flint --transport http https://mcp.tryflint.com/mcp`
+    in Claude Code, or via the first-party Claude Code plugin (`/plugin install flint`); sign in to your
+    Flint account to authorize.
 authorization:
   type: oauth2
   protected_resource: https://mcp.tryflint.com
@@ -32,11 +30,9 @@ authorization:
   - openid
   - offline_access
   source: https://mcp.tryflint.com/.well-known/oauth-protected-resource
-tools_source: >-
-  https://www.flint.com/docs/claude-code-mcp — Flint's published tool and
-  parameter reference. The live server's tools/list is OAuth-gated (anonymous
-  POST returns HTTP 401 invalid_token, re-probed 2026-08-13), so parameter
-  NAMES and TYPES below are from the provider's docs; exact JSON Schema shapes
+tools_source: https://www.flint.com/docs/claude-code-mcp — Flint's published tool and parameter reference.
+  The live server's tools/list is OAuth-gated (anonymous POST returns HTTP 401 invalid_token, re-probed
+  2026-08-13), so parameter NAMES and TYPES below are from the provider's docs; exact JSON Schema shapes
   still require an authenticated introspection.
 tools:
 - name: run_background_agent
@@ -77,40 +73,34 @@ tools:
     description: The target site to publish.
   returns: Resolves the latest changes on the staging branch and triggers a production deployment.
   source_operation: null
-  note: >-
-    No standalone REST publish operation; the nearest REST equivalent is the
-    `publish: true` flag on createAgentTask.
+  note: 'No standalone REST publish operation; the nearest REST equivalent is the `publish: true` flag
+    on createAgentTask.'
 clients_documented:
 - Claude (claude.ai custom connector)
 - Claude Code (claude mcp add / plugin)
 - Claude Cowork
 config_scopes:
-  documented: [local, user, project]
+  documented:
+  - local
+  - user
+  - project
   source: https://www.flint.com/docs/claude-code-mcp
 packaged_distribution:
   name: flint
   kind: claude-code-plugin
-  install: "/plugin install flint"
+  install: /plugin install flint
   repository: https://github.com/tryflint/claude-code-plugin
   version: 1.1.0
   license: MIT
   mcp_config: '{"mcpServers":{"flint":{"type":"http","url":"https://mcp.tryflint.com/mcp"}}}'
   bundles_skill: skills/flint-edit-site.md
-  note: >-
-    The plugin is a CONFIG + SKILL bundle, not a local server. It points Claude
-    Code at the same hosted HTTPS endpoint, so deployment mode stays `remote` —
-    there is no stdio process to install and run.
+  note: The plugin is a CONFIG + SKILL bundle, not a local server. It points Claude Code at the same hosted
+    HTTPS endpoint, so deployment mode stays `remote` — there is no stdio process to install and run.
 deployment:
   mode: remote
   endpoint: https://mcp.tryflint.com/mcp
-  install: null
-  package: https://github.com/tryflint/claude-code-plugin
-  auth: oauth
   verified: probed
   probe: gated
-  probe_detail: >-
-    POST tools/list with Accept: application/json, text/event-stream returned
-    HTTP 401 {"error":"invalid_token","error_description":"No authorization
-    provided"} — the endpoint is live and enforcing OAuth.
-  checked: '2026-08-13'
+  checked: '2026-08-12'
+  source: catalog MCP census
 crosswalk: mcp/flint-tool-crosswalk.yml
