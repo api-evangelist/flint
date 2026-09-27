@@ -85,34 +85,6 @@ components:
         createdAt:
           type: string
           format: date-time
-    TaskStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - running
-          - completed
-          - failed
-        output:
-          type: object
-          description: Present when completed.
-          properties:
-            pagesCreated:
-              type: array
-              items:
-                type: string
-            pagesModified:
-              type: array
-              items:
-                type: string
-            pagesDeleted:
-              type: array
-              items:
-                type: string
-        errorMessage:
-          type: string
-          description: Present when failed.
     GeneratePagesRequest:
       type: object
       required:
@@ -144,6 +116,34 @@ components:
         publish:
           type: boolean
           description: Whether to publish the site after generation.
+    TaskStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - running
+          - completed
+          - failed
+        output:
+          type: object
+          description: Present when completed.
+          properties:
+            pagesCreated:
+              type: array
+              items:
+                type: string
+            pagesModified:
+              type: array
+              items:
+                type: string
+            pagesDeleted:
+              type: array
+              items:
+                type: string
+        errorMessage:
+          type: string
+          description: Present when failed.
     PromptTaskRequest:
       type: object
       required:
