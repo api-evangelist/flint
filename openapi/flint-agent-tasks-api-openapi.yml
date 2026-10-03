@@ -73,18 +73,31 @@ paths:
           description: Task not found.
 components:
   schemas:
-    TaskAccepted:
+    PromptTaskRequest:
       type: object
+      required:
+      - siteId
+      - prompt
       properties:
-        taskId:
+        siteId:
           type: string
-          example: bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4
-        status:
+          description: The Flint site to operate on.
+        prompt:
           type: string
-          example: running
-        createdAt:
+          description: Free-form instructions for the AI agent to modify the site.
+        command:
           type: string
-          format: date-time
+          default: prompt
+          enum:
+          - prompt
+          description: Task command (defaults to prompt).
+        callbackUrl:
+          type: string
+          format: uri
+          description: Optional HTTPS URL that receives a POST on task completion.
+        publish:
+          type: boolean
+          description: Whether to publish the site after changes.
     GeneratePagesRequest:
       type: object
       required:
@@ -116,6 +129,18 @@ components:
         publish:
           type: boolean
           description: Whether to publish the site after generation.
+    TaskAccepted:
+      type: object
+      properties:
+        taskId:
+          type: string
+          example: bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4
+        status:
+          type: string
+          example: running
+        createdAt:
+          type: string
+          format: date-time
     TaskStatus:
       type: object
       properties:
@@ -144,31 +169,6 @@ components:
         errorMessage:
           type: string
           description: Present when failed.
-    PromptTaskRequest:
-      type: object
-      required:
-      - siteId
-      - prompt
-      properties:
-        siteId:
-          type: string
-          description: The Flint site to operate on.
-        prompt:
-          type: string
-          description: Free-form instructions for the AI agent to modify the site.
-        command:
-          type: string
-          default: prompt
-          enum:
-          - prompt
-          description: Task command (defaults to prompt).
-        callbackUrl:
-          type: string
-          format: uri
-          description: Optional HTTPS URL that receives a POST on task completion.
-        publish:
-          type: boolean
-          description: Whether to publish the site after changes.
   securitySchemes:
     bearerApiKey:
       type: http
