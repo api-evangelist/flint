@@ -73,6 +73,46 @@ paths:
           description: Task not found.
 components:
   schemas:
+    TaskStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - running
+          - completed
+          - failed
+        output:
+          type: object
+          description: Present when completed.
+          properties:
+            pagesCreated:
+              type: array
+              items:
+                type: string
+            pagesModified:
+              type: array
+              items:
+                type: string
+            pagesDeleted:
+              type: array
+              items:
+                type: string
+        errorMessage:
+          type: string
+          description: Present when failed.
+    TaskAccepted:
+      type: object
+      properties:
+        taskId:
+          type: string
+          example: bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4
+        status:
+          type: string
+          example: running
+        createdAt:
+          type: string
+          format: date-time
     PromptTaskRequest:
       type: object
       required:
@@ -129,46 +169,6 @@ components:
         publish:
           type: boolean
           description: Whether to publish the site after generation.
-    TaskAccepted:
-      type: object
-      properties:
-        taskId:
-          type: string
-          example: bg-550e8400-e29b-41d4-a716-446655440000-a1b2c3d4
-        status:
-          type: string
-          example: running
-        createdAt:
-          type: string
-          format: date-time
-    TaskStatus:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - running
-          - completed
-          - failed
-        output:
-          type: object
-          description: Present when completed.
-          properties:
-            pagesCreated:
-              type: array
-              items:
-                type: string
-            pagesModified:
-              type: array
-              items:
-                type: string
-            pagesDeleted:
-              type: array
-              items:
-                type: string
-        errorMessage:
-          type: string
-          description: Present when failed.
   securitySchemes:
     bearerApiKey:
       type: http
