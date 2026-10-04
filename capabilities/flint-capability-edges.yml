@@ -1,0 +1,28 @@
+slug: flint
+provider: Flint
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Agent Tasks
+  spec_file: flint-agent-tasks-api-openapi.yml
+  capability_id: BC-400.60
+  capability_id_l1: BC-400
+  capability_name: Digital Marketing Management
+  confidence: 0.7
+  evidence: '"run background AI agents against a Flint site to modify pages from a free-form prompt, or
+    generate multiple pages from a template ... Landing pages are generated on-brand and can be optionally
+    published"'
+  reason: The task surface creates and generates marketing landing pages for a site, which is web/digital
+    marketing content production and publication. Mapped to Digital Marketing Management; moderate confidence
+    because the two operations are generic async task create/poll and could also be read as content marketing
+    production.

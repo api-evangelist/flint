@@ -124,6 +124,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/flint-capability-edges.yml
+  name: Flint Business Capability Map
 - type: License
   name: MIT
   url: https://github.com/tryflint/claude-code-plugin/blob/main/LICENSE
