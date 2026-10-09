@@ -126,3 +126,30 @@ plan_changes:
   exhaustion: >-
     Buy credit reload bundles on demand (paid plans), upgrade a tier, or switch
     to annual billing for a larger credit pool.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - negotiated
+  - subscription
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Starter
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods: []
+  - name: Custom
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []
